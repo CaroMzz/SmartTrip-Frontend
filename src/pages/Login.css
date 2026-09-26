@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
@@ -9,7 +10,7 @@
   --muted-color: #7d9698;
 }
 
-.registration-page {
+.login-page {
   display: flex;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
@@ -17,7 +18,7 @@
 }
 
 /* Right panel */
-.registration-form-section {
+.login-form-section {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +27,7 @@
   box-sizing: border-box;
 }
 
-.form-container {
+.login-form-container {
   width: 100%;
   max-width: 470px;
 }
@@ -39,7 +40,7 @@
   letter-spacing: 1.5px;
 }
 
-.form-container h2 {
+.login-form-container h2 {
   margin: 0;
   color: var(--text-color);
   font-size: clamp(25px, 2.6vw, 36px);
@@ -55,7 +56,7 @@
   line-height: 1.7;
 }
 
-.registration-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 19px;
@@ -116,30 +117,30 @@
   background-color: var(--primary-dark);
 }
 
-.login-link {
+.signup-link {
   margin-top: 25px;
   text-align: center;
   color: var(--muted-color);
   font-size: 12px;
 }
 
-.login-link a {
+.signup-link a {
   color: var(--primary-color);
   font-weight: 700;
   text-decoration: none;
 }
 
-.login-link a:hover {
+.signup-link a:hover {
   text-decoration: underline;
 }
 
 /* Responsive design */
 @media (max-width: 900px) {
-  .registration-page {
+  .login-page {
     flex-direction: column;
   }
 
-  .registration-hero {
+  .login-hero {
     width: 100%;
     min-height: auto;
     padding: 30px;
@@ -154,13 +155,13 @@
     max-width: 500px;
   }
 
-  .registration-form-section {
+  .login-form-section {
     padding: 50px 30px;
   }
 }
 
 @media (max-width: 480px) {
-  .registration-hero {
+  .login-hero {
     padding: 25px;
   }
 
@@ -168,7 +169,7 @@
     margin-top: 40px;
   }
 
-  .registration-form-section {
+  .login-form-section {
     padding: 40px 25px;
   }
 
