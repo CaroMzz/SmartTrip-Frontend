@@ -8,13 +8,8 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-
       <Route path="/register" element={<Registration />} />
-
-      <Route
-        path="/verify-email"
-        element={<EmailVerification />}
-      />
+      <Route path="/verify-email" element={<EmailVerification />} />
     </Routes>
   );
 }
