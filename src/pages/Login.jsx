@@ -90,7 +90,7 @@ function Login() {
           </form>
 
           <p className="signup-link">
-            ¿Todavia no tenés una cuenta? {""}
+            ¿Todavia no tenés una cuenta? {" "}
             <Link to="/register">Creá tu cuenta</Link>
           </p>
         </div>
