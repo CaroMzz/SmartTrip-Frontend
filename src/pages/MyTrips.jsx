@@ -1,4 +1,6 @@
 import Sidebar from "../components/Sidebar";
+import TripSummary from "../components/TripSummary";
+import TripCard from "../components/TripCard";
 import "./MyTrips.css";
 
 function MyTrips() {
@@ -18,32 +20,15 @@ function MyTrips() {
             </p>
           </div>
 
-          <button className="create-trip-button">
+          <button
+            type="button"
+            className="create-trip-button"
+          >
             + Crear nuevo viaje
           </button>
         </header>
 
-        <section className="featured-trip">
-          <div className="featured-trip-info">
-            <span className="trip-status">
-              TU PRÓXIMA ESCAPADA
-            </span>
-
-            <h2>España, a tu ritmo</h2>
-
-            <p>
-              12–21 octubre · 10 días · 3 ciudades · 2 personas
-            </p>
-          </div>
-
-          <div className="featured-trip-price">
-            <strong>USD 2.460</strong>
-
-            <span>estimado para todo el viaje</span>
-
-            <button>Abrir mi itinerario</button>
-          </div>
-        </section>
+        <TripSummary />
 
         <section className="trips-section">
           <div className="section-title">
@@ -52,47 +37,25 @@ function MyTrips() {
           </div>
 
           <div className="trips-grid">
-            <article className="trip-card">
-              <div className="trip-card-image">
-                <div className="trip-sun"></div>
-                <div className="trip-mountains"></div>
-              </div>
+            <TripCard
+              status="Listo para viajar"
+              statusType="ready"
+              title="España, a tu ritmo"
+              cities="Madrid · Valencia · Barcelona"
+              dates="12–21 oct 2026 · 10 días"
+              createdDate="Creado el 15 sep 2026"
+              buttonText="Ver itinerario"
+            />
 
-              <span className="trip-card-status ready">
-                Listo para viajar
-              </span>
-
-              <h3>España, a tu ritmo</h3>
-
-              <p>Madrid · Valencia · Barcelona</p>
-
-              <p>12–21 oct 2026 · 10 días</p>
-
-              <small>Creado el 15 sep 2026</small>
-
-              <button>→ Ver itinerario</button>
-            </article>
-
-            <article className="trip-card">
-              <div className="trip-card-image">
-                <div className="trip-sun"></div>
-                <div className="trip-mountains"></div>
-              </div>
-
-              <span className="trip-card-status draft">
-                Borrador
-              </span>
-
-              <h3>Una semana en Italia</h3>
-
-              <p>Roma · Florencia</p>
-
-              <p>08–14 nov 2026 · 7 días</p>
-
-              <small>Creado el 13 sep 2026</small>
-
-              <button>→ Seguir planificando</button>
-            </article>
+            <TripCard
+              status="Borrador"
+              statusType="draft"
+              title="Una semana en Italia"
+              cities="Roma · Florencia"
+              dates="08–14 nov 2026 · 7 días"
+              createdDate="Creado el 13 sep 2026"
+              buttonText="Seguir planificando"
+            />
 
             <article className="new-trip-card">
               <span className="new-trip-icon">+</span>
@@ -102,11 +65,13 @@ function MyTrips() {
               </h3>
 
               <p>
-                Agregá tus ciudades favoritas y encontrá la mejor
-                forma de recorrerlas.
+                Agregá tus ciudades favoritas y encontrá la
+                mejor forma de recorrerlas.
               </p>
 
-              <button>Planear un viaje</button>
+              <button type="button">
+                Planear un viaje
+              </button>
             </article>
           </div>
         </section>
