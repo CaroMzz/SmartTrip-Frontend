@@ -1,0 +1,74 @@
+.trip-summary {
+  min-height: 102px;
+  margin-top: 20px;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #08777c;
+  box-sizing: border-box;
+}
+
+.trip-summary-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trip-summary-status {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 10px;
+  color: #18383d;
+  background-color: #f6c453;
+  font-size: 5px;
+  font-weight: 700;
+}
+
+.trip-summary-info h2 {
+  margin: 7px 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.trip-summary-info p {
+  margin: 0;
+  font-size: 6px;
+}
+
+.trip-summary-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.trip-summary-price strong {
+  font-size: 16px;
+}
+
+.trip-summary-price span {
+  margin-top: 3px;
+  font-size: 5px;
+}
+
+.trip-summary-price button {
+  margin-top: 12px;
+  padding: 7px 13px;
+  border: none;
+  border-radius: 5px;
+  color: #18383d;
+  background-color: #ffb347;
+  font-family: inherit;
+  font-size: 6px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .trip-summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}

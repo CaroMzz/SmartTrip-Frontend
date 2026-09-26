@@ -1,6 +1,12 @@
 import "./TravelHero.css";
 
-function TravelHero() {
+function TravelHero({
+  titleFirstLine = "Menos organizar.",
+  titleSecondLine = "Más viajar.",
+  description = "Tus destinos, tus precios y tus presupuestos. Todo en un solo lugar.",
+  tag = "Rutas personalizadas.",
+  footer = "Planea con intención. Viajá a tu ritmo.",
+}) {
   return (
     <section className="travel-hero">
       <div className="brand">
@@ -10,14 +16,12 @@ function TravelHero() {
 
       <div className="hero-content">
         <h1>
-          Menos organizar.
+          {titleFirstLine}
           <br />
-          <span>Más viajar.</span>
+          <span>{titleSecondLine}</span>
         </h1>
 
-        <p>
-          Tus destinos, tus precios y tus presupuestos. Todo en un solo lugar. 
-        </p>
+        <p>{description}</p>
 
         <div className="travel-illustration">
           <div className="sun"></div>
@@ -33,12 +37,13 @@ function TravelHero() {
           <div className="travel-path"></div>
         </div>
 
-        <div className="hero-tag">Rutas personalizadas.</div>
+        <div className="hero-tag">{tag}</div>
 
-        <p className="hero-footer">Planea con intención. Viajá a tu ritmo.</p>
+        <p className="hero-footer">{footer}</p>
       </div>
     </section>
   );
 }
 
 export default TravelHero;
+

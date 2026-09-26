@@ -1,0 +1,88 @@
+.trip-card {
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid #e1e9ea;
+  border-radius: 9px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.trip-card-image {
+  position: relative;
+  height: 72px;
+  overflow: hidden;
+  border-radius: 7px;
+  background-color: #d7f3f7;
+}
+
+.trip-card-sun {
+  position: absolute;
+  top: 9px;
+  right: 22px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: #f6c453;
+}
+
+.trip-card-mountains {
+  position: absolute;
+  bottom: -24px;
+  left: -10%;
+  width: 120%;
+  height: 55px;
+  border-radius: 50% 50% 0 0;
+  background-color: #08777c;
+}
+
+.trip-card-status {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 7px;
+  border-radius: 8px;
+  font-size: 5px;
+}
+
+.trip-card-status.ready {
+  color: #08777c;
+  background-color: #d7f3f7;
+}
+
+.trip-card-status.draft {
+  color: #18383d;
+  background-color: #f6c453;
+}
+
+.trip-card h3 {
+  margin: 7px 0 5px;
+  color: #18383d;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.trip-card p {
+  margin: 3px 0;
+  color: #71888b;
+  font-size: 6px;
+}
+
+.trip-card small {
+  display: block;
+  margin-top: 6px;
+  color: #a0adaf;
+  font-size: 5px;
+}
+
+.trip-card button {
+  width: 100%;
+  margin-top: 9px;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  color: #18383d;
+  background-color: #d7f3f7;
+  font-family: inherit;
+  font-size: 6px;
+  text-align: left;
+  cursor: pointer;
+}

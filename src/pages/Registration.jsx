@@ -1,6 +1,6 @@
+import { Link } from "react-router-dom";
 import TravelHero from "../components/TravelHero";
 import "./Registration.css";
-import { Link } from "react-router-dom";
 
 function Registration() {
   return (
@@ -44,12 +44,14 @@ function Registration() {
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Ingresa tu contraseña"
+                placeholder="Crea una contraseña"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmar contraseña</label>
+              <label htmlFor="confirmPassword">
+                Confirmar contraseña
+              </label>
               <input
                 type="password"
                 id="confirmPassword"
