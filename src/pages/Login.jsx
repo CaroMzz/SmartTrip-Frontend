@@ -50,9 +50,7 @@ function Login() {
 
           <h2>¡Qué bueno verte de nuevo!</h2>
 
-          <p className="form-description">
-            Iniciá sesión y retomá tus planes
-          </p>
+          <p className="form-description">Iniciá sesión y retomá tus planes</p>
 
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="form-group">
