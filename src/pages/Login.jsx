@@ -1,5 +1,6 @@
 import TravelHero from "../components/TravelHero";
 import "./Login.css";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -12,9 +13,7 @@ function Login() {
 
           <h2>¡Qué bueno verte de nuevo!</h2>
 
-          <p className="form-description">
-            Inicia sesión y retomá tus planes
-          </p>
+          <p className="form-description">Inicia sesión y retomá tus planes</p>
 
           <form className="login-form">
             <div className="form-group">
@@ -45,7 +44,8 @@ function Login() {
           </form>
 
           <p className="signup-link">
-            ¿Todavia no tenés una cuenta? <a href="#">Creá tu cuenta</a>
+            ¿Todavia no tenés una cuenta?{" "}
+            <Link to="/register">Creá tu cuenta</Link>
           </p>
         </div>
       </section>

@@ -1,4 +1,6 @@
+import TravelHero from "../components/TravelHero";
 import "./Registration.css";
+import { Link } from "react-router-dom";
 
 function Registration() {
   return (
@@ -62,7 +64,7 @@ function Registration() {
           </form>
 
           <p className="login-link">
-            ¿Ya tenés una cuenta? <a href="#">Iniciá sesión</a>
+            ¿Ya tenés una cuenta? <Link to="/">Iniciá sesión</Link>
           </p>
         </div>
       </section>
