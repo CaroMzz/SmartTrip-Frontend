@@ -13,9 +13,7 @@ function Login() {
 
           <h2>¡Qué bueno verte de nuevo!</h2>
 
-          <p className="form-description">
-            Inicia sesión para continuar planificando tu próxima aventura.
-          </p>
+          <p className="form-description">Inicia sesión y retomá tus planes</p>
 
           <form className="login-form">
             <div className="form-group">
@@ -46,6 +44,8 @@ function Login() {
           </form>
 
           <p className="signup-link">
+            ¿Todavia no tenés una cuenta?{" "}
+            <Link to="/register">Creá tu cuenta</Link>
             ¿Todavia no tenés una cuenta? <Link to="/register">Creá tu cuenta</Link>
           </p>
         </div>
