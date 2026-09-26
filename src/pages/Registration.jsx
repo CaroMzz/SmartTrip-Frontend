@@ -24,17 +24,17 @@ function Registration() {
                 type="text"
                 id="fullName"
                 name="fullName"
-                placeholder="Ingresa tu nombre completo"
+                placeholder="Florencia Lopez"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Dirección de correo electrónico</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 type="email"
                 id="email"
                 name="email"
-                placeholder="Ingresa tu email"
+                placeholder="florencia@ejemplo.com"
               />
             </div>
 
@@ -64,7 +64,12 @@ function Registration() {
           </form>
 
           <p className="login-link">
+<<<<<<< HEAD
             ¿Ya tenés una cuenta? <Link to="/">Iniciá sesión</Link>
+=======
+            ¿Ya tenés una cuenta? {" "}
+            <Link to="/">Iniciá sesión</Link>
+>>>>>>> 1d6bb69498d2ccc6ff09dab82c897a9208d1408c
           </p>
         </div>
       </section>

@@ -13,7 +13,13 @@ function Login() {
 
           <h2>¡Qué bueno verte de nuevo!</h2>
 
+<<<<<<< HEAD
           <p className="form-description">Inicia sesión y retomá tus planes</p>
+=======
+          <p className="form-description">
+            Iniciá sesión y retomá tus planes
+          </p>
+>>>>>>> 1d6bb69498d2ccc6ff09dab82c897a9208d1408c
 
           <form className="login-form">
             <div className="form-group">
@@ -44,7 +50,11 @@ function Login() {
           </form>
 
           <p className="signup-link">
+<<<<<<< HEAD
             ¿Todavia no tenés una cuenta?{" "}
+=======
+            ¿Todavia no tenés una cuenta? {""}
+>>>>>>> 1d6bb69498d2ccc6ff09dab82c897a9208d1408c
             <Link to="/register">Creá tu cuenta</Link>
           </p>
         </div>
