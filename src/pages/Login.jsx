@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import TravelHero from "../components/TravelHero";
-import { iniciarSesion } from "../api";
 import "./Login.css";
 
 const initialState = {
@@ -12,32 +11,14 @@ const initialState = {
 
 function Login() {
   const [form, setForm] = useState(initialState);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    setError("");
-    setSuccess("");
-    setLoading(true);
-
-    try {
-      const data = await iniciarSesion(form.email, form.password);
-      sessionStorage.setItem("smarttrip_token", data.token);
-      sessionStorage.setItem("smarttrip_user", JSON.stringify(data.usuario));
-      setSuccess("Sesión iniciada correctamente.");
-      setForm(initialState);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -63,7 +44,6 @@ function Login() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="florencia@ejemplo.com"
-                required
               />
             </div>
 
@@ -77,15 +57,11 @@ function Login() {
                 value={form.password}
                 onChange={handleChange}
                 placeholder="Ingresa tu contraseña"
-                required
               />
             </div>
 
-            {error && <p className="form-error">{error}</p>}
-            {success && <p className="form-success">{success}</p>}
-
-            <button type="submit" className="submit-button" disabled={loading}>
-              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+            <button type="submit" className="submit-button">
+              Iniciar sesión
             </button>
           </form>
 

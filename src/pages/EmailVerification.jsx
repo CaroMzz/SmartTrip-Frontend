@@ -1,44 +1,16 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import TravelHero from "../components/TravelHero";
-import { confirmarCorreo } from "../api";
 import "./EmailVerification.css";
 
 function EmailVerification() {
-  const location = useLocation();
-  const [token, setToken] = useState(location.state?.tokenVerificacion || "");
-  const tokenRecibido = Boolean(location.state?.tokenVerificacion);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [token, setToken] = useState("");
 
-  const email =
-    location.state?.email ||
-    sessionStorage.getItem("smarttrip_email") ||
-    "tu correo";
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    setError("");
-    setSuccess("");
-
-    if (!token.trim()) {
-      setError("Ingresá el token de verificación.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const data = await confirmarCorreo(token.trim());
-      setSuccess(`${data.mensaje} Ahora podés iniciar sesión.`);
-      setToken("");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    navigate("/");
   };
 
   return (
@@ -62,9 +34,7 @@ function EmailVerification() {
           </div>
 
           <p className="verification-message">
-            Te enviamos un enlace a {email}. {tokenRecibido
-              ? "El token de verificación llegó desde el backend de desarrollo."
-              : "En desarrollo, el token de verificación aparece en la consola del servidor."}
+            Te enviamos un enlace a florencia@ejemplo.com. Abrilo para verificar tu cuenta y empezar a planificar.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -76,20 +46,13 @@ function EmailVerification() {
                 name="verification-token"
                 value={token}
                 onChange={(event) => setToken(event.target.value)}
-                placeholder={tokenRecibido ? "Token recibido del backend" : "Pegá el token de la consola"}
+                placeholder="Pegá el token de prueba"
               />
             </div>
 
-            {error && <p className="form-error">{error}</p>}
-            {success && <p className="form-success">{success}</p>}
-
             <div className="verification-actions">
-              <button
-                type="submit"
-                className="verification-button primary"
-                disabled={loading}
-              >
-                {loading ? "Verificando..." : "Ya verifiqué mi correo"}
+              <button type="submit" className="verification-button primary">
+                Ya verifiqué mi correo
               </button>
 
               <button type="button" className="verification-button secondary">
@@ -99,8 +62,7 @@ function EmailVerification() {
           </form>
 
           <p className="verification-help">
-            Si el token no llegó al navegador, habilitá <strong>PRINT_VERIFICATION_TOKENS=true</strong>{" "}
-            en el backend local y copiá el valor de su consola.
+            Este flujo es solo visual y de navegación para la maqueta.
           </p>
 
           <p className="verification-login">
