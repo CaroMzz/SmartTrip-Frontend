@@ -13,6 +13,7 @@ import TripCalendar from "../pages/trip-calendar/TripCalendar";
 import TripBudget from "../pages/trip-budget/TripBudget";
 import Profile from "../pages/profile/Profile";
 import ChangePassword from "../pages/change-password/ChangePassword";
+import EmailResent from "../pages/email-resent/EmailResent";
 
 
 function AppRoutes() {
@@ -23,6 +24,8 @@ function AppRoutes() {
       <Route path="/register" element={<Registration />} />
 
       <Route path="/email-verification" element={<EmailVerification />} />
+
+      <Route path="/email-verification/resent" element={<EmailResent />} />
 
       <Route path="/my-trips" element={<MyTrips />} />
 

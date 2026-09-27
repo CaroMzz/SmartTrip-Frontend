@@ -1,0 +1,108 @@
+.email-resent-page {
+  min-height: 100vh;
+  display: flex;
+  background-color: #e6f0f1;
+}
+
+.email-resent-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.email-resent-topbar {
+  min-height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 0 28px;
+  color: #71888b;
+  background-color: #ffffff;
+  font-size: 12px;
+}
+
+.email-resent-currency {
+  padding: 7px 12px;
+  border-radius: 10px;
+  color: #08777c;
+  background-color: #d7f3f7;
+  font-size: 11px;
+}
+
+.email-resent-card {
+  width: min(100% - 40px, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: auto;
+  padding: 26px 28px;
+  border: 1px solid #e1e9ea;
+  border-radius: 9px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.email-resent-check {
+  color: #08777c;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.email-resent-card h1 {
+  margin: 16px 0 0;
+  color: #18383d;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.email-resent-card p {
+  margin: 9px 0 0;
+  color: #71888b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.email-resent-card small {
+  margin-top: 10px;
+  color: #9aaeb0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.email-resent-button {
+  min-width: 170px;
+  min-height: 42px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  padding: 0 16px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #08777c;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.email-resent-button:hover {
+  background-color: #06686d;
+}
+
+.email-resent-button:focus-visible {
+  outline: 2px solid #18383d;
+  outline-offset: 3px;
+}
+
+@media (max-width: 500px) {
+  .email-resent-topbar {
+    padding: 0 18px;
+  }
+
+  .email-resent-card {
+    width: calc(100% - 32px);
+    padding: 24px 20px;
+  }
+}
