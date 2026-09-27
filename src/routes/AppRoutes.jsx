@@ -5,6 +5,7 @@ import Registration from "../pages/Registration";
 import EmailVerification from "../pages/EmailVerification";
 import MyTrips from "../pages/MyTrips";
 import NewTrip from "../pages/NewTrip";
+import BudgetPreferences from "../pages/BudgetPreferences";
 
 
 function AppRoutes() {
@@ -19,6 +20,8 @@ function AppRoutes() {
       <Route path="/my-trips" element={<MyTrips />} />
 
       <Route path="/new-trip" element={<NewTrip />} />
+
+      <Route path="/budget-preferences" element={<BudgetPreferences />} />
     </Routes>
   );
 }
