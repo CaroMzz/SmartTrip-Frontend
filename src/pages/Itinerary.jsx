@@ -64,7 +64,7 @@ function Itinerary() {
             </span>
             <a className="itinerary-tab" href="#presupuesto">Presupuesto</a>
           </div>
-          <Link to="/new-trip" className="itinerary-edit-button">
+          <Link to="/edit-trip" className="itinerary-edit-button">
             Editar viaje
           </Link>
         </div>

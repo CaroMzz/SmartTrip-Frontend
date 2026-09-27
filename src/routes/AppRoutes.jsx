@@ -8,6 +8,7 @@ import NewTrip from "../pages/NewTrip";
 import BudgetPreferences from "../pages/BudgetPreferences";
 import CompareItineraries from "../pages/CompareItineraries";
 import Itinerary from "../pages/Itinerary";
+import EditTrip from "../pages/EditTrip";
 
 
 function AppRoutes() {
@@ -28,6 +29,8 @@ function AppRoutes() {
       <Route path="/compare-itineraries" element={<CompareItineraries />} />
 
       <Route path="/itinerary" element={<Itinerary />} />
+
+      <Route path="/edit-trip" element={<EditTrip />} />
     </Routes>
   );
 }
