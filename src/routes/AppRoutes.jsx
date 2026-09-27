@@ -1,17 +1,24 @@
 import { Routes, Route } from "react-router-dom";
 
-import EmailVerification from "../pages/EmailVerification";
 import Login from "../pages/Login";
 import Registration from "../pages/Registration";
+import EmailVerification from "../pages/EmailVerification";
 import MyTrips from "../pages/MyTrips";
+import NewTrip from "../pages/NewTrip";
+
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+
       <Route path="/register" element={<Registration />} />
-      <Route path="/verify-email" element={<EmailVerification />} />
+
+      <Route path="/email-verification" element={<EmailVerification />} />
+
       <Route path="/my-trips" element={<MyTrips />} />
+
+      <Route path="/new-trip" element={<NewTrip />} />
     </Routes>
   );
 }

@@ -1,6 +1,6 @@
 .trip-card {
   min-width: 0;
-  padding: 7px;
+  padding: 14px;
   border: 1px solid #e1e9ea;
   border-radius: 9px;
   background-color: #ffffff;
@@ -9,7 +9,7 @@
 
 .trip-card-image {
   position: relative;
-  height: 72px;
+  height: 150px;
   overflow: hidden;
   border-radius: 7px;
   background-color: #d7f3f7;
@@ -17,30 +17,30 @@
 
 .trip-card-sun {
   position: absolute;
-  top: 9px;
-  right: 22px;
-  width: 13px;
-  height: 13px;
+  top: 16px;
+  right: 28px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: #f6c453;
 }
 
 .trip-card-mountains {
   position: absolute;
-  bottom: -24px;
+  bottom: -36px;
   left: -10%;
   width: 120%;
-  height: 55px;
+  height: 90px;
   border-radius: 50% 50% 0 0;
   background-color: #08777c;
 }
 
 .trip-card-status {
   display: inline-block;
-  margin-top: 7px;
-  padding: 3px 7px;
-  border-radius: 8px;
-  font-size: 5px;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
 }
 
 .trip-card-status.ready {
@@ -54,35 +54,35 @@
 }
 
 .trip-card h3 {
-  margin: 7px 0 5px;
+  margin: 12px 0 8px;
   color: #18383d;
-  font-size: 9px;
+  font-size: 20px;
   font-weight: 600;
 }
 
 .trip-card p {
-  margin: 3px 0;
+  margin: 6px 0;
   color: #71888b;
-  font-size: 6px;
+  font-size: 14px;
 }
 
 .trip-card small {
   display: block;
-  margin-top: 6px;
+  margin-top: 10px;
   color: #a0adaf;
-  font-size: 5px;
+  font-size: 12px;
 }
 
 .trip-card button {
   width: 100%;
-  margin-top: 9px;
-  padding: 7px;
+  margin-top: 14px;
+  padding: 12px;
   border: none;
   border-radius: 5px;
   color: #18383d;
   background-color: #d7f3f7;
   font-family: inherit;
-  font-size: 6px;
+  font-size: 14px;
   text-align: left;
   cursor: pointer;
 }

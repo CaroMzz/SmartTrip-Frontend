@@ -1,6 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import TripSummary from "../components/TripSummary";
 import TripCard from "../components/TripCard";
+import { Link } from "react-router-dom";
 import "./MyTrips.css";
 
 function MyTrips() {
@@ -69,9 +70,7 @@ function MyTrips() {
                 mejor forma de recorrerlas.
               </p>
 
-              <button type="button">
-                Planear un viaje
-              </button>
+              <Link to="/new-trip">Planear un viaje</Link>
             </article>
           </div>
         </section>

@@ -1,7 +1,7 @@
 .trip-summary {
-  min-height: 102px;
-  margin-top: 20px;
-  padding: 14px 20px;
+  min-height: 170px;
+  margin-top: 28px;
+  padding: 24px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,23 +19,23 @@
 
 .trip-summary-status {
   display: inline-block;
-  padding: 4px 9px;
+  padding: 7px 12px;
   border-radius: 10px;
   color: #18383d;
   background-color: #f6c453;
-  font-size: 5px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .trip-summary-info h2 {
-  margin: 7px 0 5px;
-  font-size: 16px;
+  margin: 12px 0 8px;
+  font-size: 24px;
   font-weight: 600;
 }
 
 .trip-summary-info p {
   margin: 0;
-  font-size: 6px;
+  font-size: 14px;
 }
 
 .trip-summary-price {
@@ -45,23 +45,23 @@
 }
 
 .trip-summary-price strong {
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .trip-summary-price span {
-  margin-top: 3px;
-  font-size: 5px;
+  margin-top: 6px;
+  font-size: 12px;
 }
 
 .trip-summary-price button {
-  margin-top: 12px;
-  padding: 7px 13px;
+  margin-top: 16px;
+  padding: 10px 18px;
   border: none;
   border-radius: 5px;
   color: #18383d;
   background-color: #ffb347;
   font-family: inherit;
-  font-size: 6px;
+  font-size: 14px;
   cursor: pointer;
 }
 
