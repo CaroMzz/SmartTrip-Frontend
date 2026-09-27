@@ -40,7 +40,7 @@ function TripCalendar() {
         <nav className="trip-calendar-tabs" aria-label="Secciones del viaje">
           <Link className="trip-calendar-tab" to="/itinerary">Itinerario</Link>
           <span className="trip-calendar-tab active" aria-current="page">Calendario</span>
-          <Link className="trip-calendar-tab" to="/itinerary#presupuesto">Presupuesto</Link>
+          <Link className="trip-calendar-tab" to="/trip-budget">Presupuesto</Link>
           <Link className="trip-calendar-edit-button" to="/edit-trip">Editar viaje</Link>
         </nav>
 

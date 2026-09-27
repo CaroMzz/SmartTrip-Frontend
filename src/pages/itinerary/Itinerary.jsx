@@ -65,7 +65,9 @@ function Itinerary() {
             <Link className="itinerary-tab" to="/trip-calendar">
               Calendario
             </Link>
-            <a className="itinerary-tab" href="#presupuesto">Presupuesto</a>
+            <Link className="itinerary-tab" to="/trip-budget">
+              Presupuesto
+            </Link>
           </div>
           <Link to="/edit-trip" className="itinerary-edit-button">
             Editar viaje
