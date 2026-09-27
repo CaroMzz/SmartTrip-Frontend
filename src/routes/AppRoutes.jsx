@@ -6,6 +6,7 @@ import EmailVerification from "../pages/EmailVerification";
 import MyTrips from "../pages/MyTrips";
 import NewTrip from "../pages/NewTrip";
 import BudgetPreferences from "../pages/BudgetPreferences";
+import CompareItineraries from "../pages/CompareItineraries";
 
 
 function AppRoutes() {
@@ -22,6 +23,8 @@ function AppRoutes() {
       <Route path="/new-trip" element={<NewTrip />} />
 
       <Route path="/budget-preferences" element={<BudgetPreferences />} />
+
+      <Route path="/compare-itineraries" element={<CompareItineraries />} />
     </Routes>
   );
 }

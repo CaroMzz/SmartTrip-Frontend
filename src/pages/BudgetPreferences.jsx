@@ -145,9 +145,9 @@ function BudgetPreferences() {
                 ← Volver
               </Link>
 
-              <button type="button" className="generate-button">
+              <Link to="/compare-itineraries" className="continue-button">
                 ✧ Generar alternativas
-              </button>
+              </Link>
             </div>
           </section>
 
