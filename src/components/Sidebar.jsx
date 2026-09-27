@@ -24,7 +24,11 @@ function Sidebar() {
 
         <Link
           to="/profile"
-          className={`sidebar-link ${pathname === "/profile" ? "active" : ""}`}
+          className={`sidebar-link ${
+            pathname === "/profile" || pathname === "/change-password"
+              ? "active"
+              : ""
+          }`}
         >
           <span>♙</span>
           Mi perfil

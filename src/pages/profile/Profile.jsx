@@ -13,8 +13,6 @@ const initialProfile = {
 function Profile() {
   const [profile, setProfile] = useState(initialProfile);
   const [saved, setSaved] = useState(false);
-  const [passwordOpen, setPasswordOpen] = useState(false);
-  const [passwordMessage, setPasswordMessage] = useState("");
 
   function updateProfile(field, value) {
     setProfile((currentProfile) => ({ ...currentProfile, [field]: value }));
@@ -24,21 +22,6 @@ function Profile() {
   function handleProfileSubmit(event) {
     event.preventDefault();
     setSaved(true);
-  }
-
-  function handlePasswordSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const password = formData.get("new-password");
-    const confirmation = formData.get("confirm-password");
-
-    if (password !== confirmation) {
-      setPasswordMessage("Las contraseñas no coinciden.");
-      return;
-    }
-
-    setPasswordMessage("Contraseña actualizada en esta vista.");
-    event.currentTarget.reset();
   }
 
   const initials = profile.name
@@ -174,32 +157,9 @@ function Profile() {
                 <h2>Seguridad</h2>
                 <p>Mantené segura tu cuenta con una contraseña actualizada.</p>
               </div>
-              <button
-                className="profile-password-toggle"
-                type="button"
-                aria-expanded={passwordOpen}
-                onClick={() => {
-                  setPasswordOpen((isOpen) => !isOpen);
-                  setPasswordMessage("");
-                }}
-              >
-                {passwordOpen ? "Cancelar" : "Cambiar contraseña"}
-              </button>
-
-              {passwordOpen && (
-                <form className="profile-password-form" onSubmit={handlePasswordSubmit}>
-                  <label className="profile-field" htmlFor="new-password">
-                    <span>Nueva contraseña</span>
-                    <input id="new-password" name="new-password" type="password" minLength="8" required />
-                  </label>
-                  <label className="profile-field" htmlFor="confirm-password">
-                    <span>Repetir contraseña</span>
-                    <input id="confirm-password" name="confirm-password" type="password" minLength="8" required />
-                  </label>
-                  <button className="profile-save-button" type="submit">Actualizar contraseña</button>
-                  {passwordMessage && <p className="profile-save-status" role="status">{passwordMessage}</p>}
-                </form>
-              )}
+              <Link to="/change-password" className="profile-password-toggle">
+                Cambiar contraseña
+              </Link>
             </section>
           </aside>
         </div>

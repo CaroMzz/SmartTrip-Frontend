@@ -38,6 +38,10 @@
 }
 
 .create-trip-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px 18px;
   border: none;
   border-radius: 6px;
@@ -46,7 +50,117 @@
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.create-trip-button:hover,
+.empty-trips-create-button:hover {
+  background-color: #06686d;
+}
+
+.create-trip-button:focus-visible,
+.empty-trips-create-button:focus-visible {
+  outline: 2px solid #18383d;
+  outline-offset: 3px;
+}
+
+.empty-trips-state {
+  min-height: clamp(320px, 52vh, 440px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 26px;
+  padding: 32px 24px;
+  border: 1px solid #e1e9ea;
+  border-radius: 9px;
+  background-color: #ffffff;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.empty-trips-artwork {
+  width: min(100%, 240px);
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #d9f4f7;
+}
+
+.empty-trips-artwork svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.empty-art-sun {
+  fill: #f6c453;
+}
+
+.empty-art-sea {
+  fill: #56b8c6;
+}
+
+.empty-art-ground {
+  fill: #08777c;
+}
+
+.empty-art-route {
+  fill: none;
+  stroke: #f6c453;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.empty-art-building {
+  fill: #ffffff;
+}
+
+.empty-art-window {
+  fill: #f6c453;
+}
+
+.empty-art-base {
+  fill: #0a5d63;
+}
+
+.empty-trips-state h2 {
+  margin: 20px 0 0;
+  color: #18383d;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.empty-trips-state > p {
+  max-width: 420px;
+  margin: 9px 0 0;
+  color: #71888b;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.empty-trips-create-button {
+  min-width: 180px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 22px;
+  padding: 0 18px;
+  border-radius: 5px;
+  color: #ffffff;
+  background-color: #08777c;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.empty-trips-create-button span {
+  font-size: 18px;
+  font-weight: 400;
 }
 
 .trips-section {
@@ -133,5 +247,26 @@
 @media (max-width: 800px) {
   .trips-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .my-trips-content {
+    padding: 28px 18px;
+  }
+
+  .my-trips-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .empty-trips-state {
+    min-height: 360px;
+    margin-top: 22px;
+    padding: 24px 18px;
+  }
+
+  .empty-trips-state h2 {
+    font-size: 20px;
   }
 }

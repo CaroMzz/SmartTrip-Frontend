@@ -347,28 +347,14 @@
 
 .profile-password-toggle {
 	width: 100%;
+	min-height: 42px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin-top: 16px;
 	color: #08777c;
 	background-color: #d7f3f7;
-}
-
-.profile-password-form {
-	margin-top: 18px;
-	padding-top: 16px;
-	border-top: 1px solid #e8eeee;
-}
-
-.profile-password-form .profile-field input {
-	font-size: 13px;
-}
-
-.profile-password-form .profile-save-button {
-	width: 100%;
-}
-
-.profile-password-form .profile-save-status {
-	margin: 12px 0 0;
-	line-height: 1.45;
+	text-decoration: none;
 }
 
 .profile-breadcrumb a:focus-visible,
