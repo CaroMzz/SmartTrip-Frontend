@@ -144,9 +144,9 @@ function NewTrip() {
                 />
               </div>
 
-              <button type="submit" className="continue-button">
+              <Link to="/budget-preferences" className="continue-with-trips">
                 → Continuar
-              </button>
+              </Link>
             </div>
           </form>
 
