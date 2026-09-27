@@ -7,6 +7,7 @@ import MyTrips from "../pages/MyTrips";
 import NewTrip from "../pages/NewTrip";
 import BudgetPreferences from "../pages/BudgetPreferences";
 import CompareItineraries from "../pages/CompareItineraries";
+import Itinerary from "../pages/Itinerary";
 
 
 function AppRoutes() {
@@ -25,6 +26,8 @@ function AppRoutes() {
       <Route path="/budget-preferences" element={<BudgetPreferences />} />
 
       <Route path="/compare-itineraries" element={<CompareItineraries />} />
+
+      <Route path="/itinerary" element={<Itinerary />} />
     </Routes>
   );
 }
