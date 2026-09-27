@@ -1,6 +1,6 @@
-import Sidebar from "../components/Sidebar";
-import TripSummary from "../components/TripSummary";
-import TripCard from "../components/TripCard";
+import Sidebar from "../../components/Sidebar";
+import TripSummary from "../../components/TripSummary";
+import TripCard from "../../components/TripCard";
 import { Link } from "react-router-dom";
 import "./MyTrips.css";
 

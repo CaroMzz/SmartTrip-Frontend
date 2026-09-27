@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import ItineraryCard from "../components/ItineraryCard";
+import Sidebar from "../../components/Sidebar";
+import ItineraryCard from "../../components/ItineraryCard";
 import "./CompareItineraries.css";
 
 const itineraries = [

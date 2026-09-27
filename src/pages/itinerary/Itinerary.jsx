@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import "./Itinerary.css";
 
 const itineraryData = {
@@ -62,6 +62,9 @@ function Itinerary() {
             <span className="itinerary-tab active" aria-current="page">
               Recorrido
             </span>
+            <Link className="itinerary-tab" to="/trip-calendar">
+              Calendario
+            </Link>
             <a className="itinerary-tab" href="#presupuesto">Presupuesto</a>
           </div>
           <Link to="/edit-trip" className="itinerary-edit-button">
