@@ -12,6 +12,7 @@ import EditTrip from "../pages/edit-trip/EditTrip";
 import TripCalendar from "../pages/trip-calendar/TripCalendar";
 import TripBudget from "../pages/trip-budget/TripBudget";
 import Profile from "../pages/profile/Profile";
+import ChangePassword from "../pages/change-password/ChangePassword";
 
 
 function AppRoutes() {
@@ -40,6 +41,8 @@ function AppRoutes() {
       <Route path="/trip-budget" element={<TripBudget />} />
 
       <Route path="/profile" element={<Profile />} />
+
+      <Route path="/change-password" element={<ChangePassword />} />
     </Routes>
   );
 }
