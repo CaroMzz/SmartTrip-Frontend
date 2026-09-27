@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TravelHero from "../../components/TravelHero";
 import "./EmailVerification.css";
 
 function EmailVerification() {
+  const navigate = useNavigate();
+
   return (
     <div className="email-verification-page">
       <TravelHero
@@ -41,6 +43,7 @@ function EmailVerification() {
             <button
               type="button"
               className="verification-button secondary"
+              onClick={() => navigate("/email-verification/resent")}
             >
               Reenviar enlace
             </button>
