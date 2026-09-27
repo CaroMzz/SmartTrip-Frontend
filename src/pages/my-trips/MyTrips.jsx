@@ -1,6 +1,6 @@
-import Sidebar from "../components/Sidebar";
-import TripSummary from "../components/TripSummary";
-import TripCard from "../components/TripCard";
+import Sidebar from "../../components/Sidebar";
+import TripSummary from "../../components/TripSummary";
+import TripCard from "../../components/TripCard";
 import { Link } from "react-router-dom";
 import "./MyTrips.css";
 
@@ -46,6 +46,7 @@ function MyTrips() {
               dates="12–21 oct 2026 · 10 días"
               createdDate="Creado el 15 sep 2026"
               buttonText="Ver itinerario"
+              to="/itinerary"
             />
 
             <TripCard
@@ -56,6 +57,7 @@ function MyTrips() {
               dates="08–14 nov 2026 · 7 días"
               createdDate="Creado el 13 sep 2026"
               buttonText="Seguir planificando"
+              to="/budget-preferences"
             />
 
             <article className="new-trip-card">

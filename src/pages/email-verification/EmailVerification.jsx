@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import TravelHero from "../components/TravelHero";
+import TravelHero from "../../components/TravelHero";
 import "./EmailVerification.css";
 
 function EmailVerification() {

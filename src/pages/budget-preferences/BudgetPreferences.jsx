@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import "./BudgetPreferences.css";
 
 function BudgetPreferences() {
@@ -145,9 +145,9 @@ function BudgetPreferences() {
                 ← Volver
               </Link>
 
-              <button type="button" className="generate-button">
+              <Link to="/compare-itineraries" className="continue-button">
                 ✧ Generar alternativas
-              </button>
+              </Link>
             </div>
           </section>
 

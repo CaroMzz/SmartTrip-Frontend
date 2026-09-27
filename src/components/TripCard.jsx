@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./TripCard.css";
 
 function TripCard({
@@ -8,6 +9,7 @@ function TripCard({
   dates,
   createdDate,
   buttonText,
+  to,
 }) {
   return (
     <article className="trip-card">
@@ -28,9 +30,9 @@ function TripCard({
 
       <small>{createdDate}</small>
 
-      <button type="button">
+      <Link className="trip-card-action" to={to}>
         → {buttonText}
-      </button>
+      </Link>
     </article>
   );
 }
