@@ -11,6 +11,7 @@ import Itinerary from "../pages/itinerary/Itinerary";
 import EditTrip from "../pages/edit-trip/EditTrip";
 import TripCalendar from "../pages/trip-calendar/TripCalendar";
 import TripBudget from "../pages/trip-budget/TripBudget";
+import Profile from "../pages/profile/Profile";
 
 
 function AppRoutes() {
@@ -37,6 +38,8 @@ function AppRoutes() {
       <Route path="/trip-calendar" element={<TripCalendar />} />
 
       <Route path="/trip-budget" element={<TripBudget />} />
+
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

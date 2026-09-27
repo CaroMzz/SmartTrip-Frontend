@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 function Sidebar() {
+  const { pathname } = useLocation();
+
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
@@ -12,12 +14,18 @@ function Sidebar() {
       <p className="sidebar-section-title">TU PRÓXIMA HISTORIA</p>
 
       <nav className="sidebar-navigation">
-        <Link to="/my-trips" className="sidebar-link active">
+        <Link
+          to="/my-trips"
+          className={`sidebar-link ${pathname === "/my-trips" ? "active" : ""}`}
+        >
           <span>▣</span>
           Mis viajes
         </Link>
 
-        <Link to="/profile" className="sidebar-link">
+        <Link
+          to="/profile"
+          className={`sidebar-link ${pathname === "/profile" ? "active" : ""}`}
+        >
           <span>♙</span>
           Mi perfil
         </Link>
