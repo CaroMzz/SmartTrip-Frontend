@@ -14,6 +14,7 @@ import TripBudget from "../pages/trip-budget/TripBudget";
 import Profile from "../pages/profile/Profile";
 import ChangePassword from "../pages/change-password/ChangePassword";
 import EmailResent from "../pages/email-resent/EmailResent";
+import Faq from "../pages/faq/Faq";
 
 
 function AppRoutes() {
@@ -46,6 +47,9 @@ function AppRoutes() {
       <Route path="/profile" element={<Profile />} />
 
       <Route path="/change-password" element={<ChangePassword />} />
+
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/ayuda" element={<Faq />} />
     </Routes>
   );
 }

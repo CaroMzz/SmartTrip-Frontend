@@ -33,6 +33,18 @@ function Sidebar() {
           <span>♙</span>
           Mi perfil
         </Link>
+
+        <Link
+          to="/faq"
+          className={`sidebar-link ${
+            pathname === "/faq" || pathname === "/ayuda"
+              ? "active"
+              : ""
+          }`}
+        >
+          <span>❓</span>
+          Ayuda y FAQ
+        </Link>
       </nav>
 
       <div className="sidebar-message">
