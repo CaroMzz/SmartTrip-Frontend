@@ -54,15 +54,7 @@ function Login() {
           </form>
 
           <p className="signup-link">
-            ¿Todavia no tenés una cuenta?{" "}
-            <Link to="/register">Creá tu cuenta</Link>
-          </p>
-
-          <p style={{ marginTop: "16px", fontSize: "13px", textAlign: "center", color: "#71888b" }}>
-            ¿Tenés dudas sobre cómo usar la plataforma?{" "}
-            <Link to="/faq" style={{ color: "#08777c", fontWeight: 600 }}>
-              Ver Centro de Ayuda (FAQ)
-            </Link>
+            ¿Todavia no tenés una cuenta? <Link to="/register">Creá tu cuenta</Link>
           </p>
         </div>
       </section>

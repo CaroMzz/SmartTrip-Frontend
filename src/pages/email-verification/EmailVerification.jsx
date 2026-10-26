@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import TravelHero from "../../components/TravelHero";
 import "./EmailVerification.css";
 
 function EmailVerification() {
-  const navigate = useNavigate();
+  const [resendNotice, setResendNotice] = useState(false);
 
   return (
     <div className="email-verification-page">
@@ -43,11 +44,18 @@ function EmailVerification() {
             <button
               type="button"
               className="verification-button secondary"
-              onClick={() => navigate("/email-verification/resent")}
+              onClick={() => setResendNotice(true)}
             >
               Reenviar enlace
             </button>
           </div>
+
+          {resendNotice && (
+            <p className="verification-resend-notice" role="status">
+              Solicitud de reenvío preparada. El envío real requiere conectar
+              el servicio de correo.
+            </p>
+          )}
 
           <p className="verification-help">
             ¿No llegó? Revisá la carpeta de correo no deseado.

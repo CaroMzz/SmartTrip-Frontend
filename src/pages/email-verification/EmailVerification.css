@@ -58,6 +58,17 @@
   margin-top: 32px;
 }
 
+.verification-resend-notice {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid #cce8e5;
+  border-radius: 5px;
+  color: #315f60;
+  background-color: #e6f5f2;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .verification-button {
   width: 100%;
   min-height: 44px;
