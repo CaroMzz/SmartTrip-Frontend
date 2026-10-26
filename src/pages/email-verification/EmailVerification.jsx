@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import TravelHero from "../components/TravelHero";
+import TravelHero from "../../components/TravelHero";
 import "./EmailVerification.css";
 
 function EmailVerification() {
+  const [resendNotice, setResendNotice] = useState(false);
+
   return (
     <div className="email-verification-page">
       <TravelHero
@@ -41,10 +44,18 @@ function EmailVerification() {
             <button
               type="button"
               className="verification-button secondary"
+              onClick={() => setResendNotice(true)}
             >
               Reenviar enlace
             </button>
           </div>
+
+          {resendNotice && (
+            <p className="verification-resend-notice" role="status">
+              Solicitud de reenvío preparada. El envío real requiere conectar
+              el servicio de correo.
+            </p>
+          )}
 
           <p className="verification-help">
             ¿No llegó? Revisá la carpeta de correo no deseado.

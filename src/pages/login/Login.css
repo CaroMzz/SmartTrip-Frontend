@@ -9,7 +9,7 @@
   --muted-color: #7d9698;
 }
 
-.registration-page {
+.login-page {
   display: flex;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
@@ -17,7 +17,7 @@
 }
 
 /* Right panel */
-.registration-form-section {
+.login-form-section {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,7 @@
   box-sizing: border-box;
 }
 
-.form-container {
+.login-form-container {
   width: 100%;
   max-width: 470px;
 }
@@ -34,12 +34,12 @@
 .form-overline {
   margin: 0 0 18px;
   color: var(--primary-color);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 1.5px;
 }
 
-.form-container h2 {
+.login-form-container h2 {
   margin: 0;
   color: var(--text-color);
   font-size: clamp(25px, 2.6vw, 36px);
@@ -51,14 +51,14 @@
 .form-description {
   margin: 15px 0 35px;
   color: var(--muted-color);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.7;
 }
 
-.registration-form {
+.login-form {
   display: flex;
   flex-direction: column;
-  gap: 19px;
+  gap: 22px;
 }
 
 .form-group {
@@ -69,14 +69,14 @@
 
 .form-group label {
   color: var(--text-color);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .form-group input {
   width: 100%;
-  height: 46px;
-  padding: 0 15px;
+  height: 52px;
+  padding: 0 16px;
   box-sizing: border-box;
   border: 1px solid #e2e9e9;
   border-radius: 6px;
@@ -84,7 +84,7 @@
   background-color: white;
   color: var(--text-color);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -99,14 +99,14 @@
 
 .submit-button {
   width: 100%;
-  height: 46px;
+  height: 52px;
   margin-top: 8px;
   border: none;
   border-radius: 6px;
   background-color: var(--primary-color);
   color: white;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -116,30 +116,30 @@
   background-color: var(--primary-dark);
 }
 
-.login-link {
+.signup-link {
   margin-top: 25px;
   text-align: center;
   color: var(--muted-color);
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.login-link a {
+.signup-link a {
   color: var(--primary-color);
   font-weight: 700;
   text-decoration: none;
 }
 
-.login-link a:hover {
+.signup-link a:hover {
   text-decoration: underline;
 }
 
 /* Responsive design */
 @media (max-width: 900px) {
-  .registration-page {
+  .login-page {
     flex-direction: column;
   }
 
-  .registration-hero {
+  .login-hero {
     width: 100%;
     min-height: auto;
     padding: 30px;
@@ -154,13 +154,13 @@
     max-width: 500px;
   }
 
-  .registration-form-section {
+  .login-form-section {
     padding: 50px 30px;
   }
 }
 
 @media (max-width: 480px) {
-  .registration-hero {
+  .login-hero {
     padding: 25px;
   }
 
@@ -168,7 +168,7 @@
     margin-top: 40px;
   }
 
-  .registration-form-section {
+  .login-form-section {
     padding: 40px 25px;
   }
 

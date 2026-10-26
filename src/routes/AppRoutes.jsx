@@ -1,17 +1,51 @@
 import { Routes, Route } from "react-router-dom";
 
-import EmailVerification from "../pages/EmailVerification";
-import Login from "../pages/Login";
-import Registration from "../pages/Registration";
-import MyTrips from "../pages/MyTrips";
+import Login from "../pages/login/Login";
+import Registration from "../pages/registration/Registration";
+import EmailVerification from "../pages/email-verification/EmailVerification";
+import MyTrips from "../pages/my-trips/MyTrips";
+import NewTrip from "../pages/new-trips/NewTrip";
+import BudgetPreferences from "../pages/budget-preferences/BudgetPreferences";
+import CompareItineraries from "../pages/compare-itineraries/CompareItineraries";
+import Itinerary from "../pages/itinerary/Itinerary";
+import EditTrip from "../pages/edit-trip/EditTrip";
+import TripCalendar from "../pages/trip-calendar/TripCalendar";
+import TripBudget from "../pages/trip-budget/TripBudget";
+import Profile from "../pages/profile/Profile";
+import ChangePassword from "../pages/change-password/ChangePassword";
+
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+
       <Route path="/register" element={<Registration />} />
-      <Route path="/verify-email" element={<EmailVerification />} />
+
+      <Route path="/email-verification" element={<EmailVerification />} />
+
       <Route path="/my-trips" element={<MyTrips />} />
+
+      <Route path="/new-trip" element={<NewTrip />} />
+
+      <Route path="/budget-preferences" element={<BudgetPreferences />} />
+
+      <Route path="/compare-itineraries" element={<CompareItineraries />} />
+
+      <Route path="/itinerary" element={<Itinerary />} />
+
+      <Route path="/edit-trip" element={<EditTrip />} />
+
+      <Route path="/trip-calendar" element={<TripCalendar />} />
+
+      <Route path="/trip-budget" element={<TripBudget />} />
+
+      <Route path="/profile" element={<Profile />} />
+
+      <Route path="/change-password" element={<ChangePassword />} />
+
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/ayuda" element={<Faq />} />
     </Routes>
   );
 }

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./TripSummary.css";
 
 function TripSummary() {
@@ -16,13 +17,13 @@ function TripSummary() {
       </div>
 
       <div className="trip-summary-price">
-        <strong>USD 2.460</strong>
+        <strong>USD 2.680</strong>
 
         <span>estimado para todo el viaje</span>
 
-        <button type="button">
+        <Link className="trip-summary-action" to="/itinerary">
           Abrir mi itinerario
-        </button>
+        </Link>
       </div>
     </section>
   );
