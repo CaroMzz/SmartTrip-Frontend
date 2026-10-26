@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import TravelHero from "../components/TravelHero";
 import "./EmailVerification.css";
 
 function EmailVerification() {
+  const { state } = useLocation();
+  const email = state?.email;
+
   return (
     <div className="email-verification-page">
       <TravelHero
@@ -26,8 +29,9 @@ function EmailVerification() {
           </div>
 
           <p className="verification-message">
-            Te enviamos un enlace a florencia@ejemplo.com. Abrilo
-            para verificar tu cuenta y empezar a planificar.
+            {email
+              ? `Te enviamos un enlace a ${email}. Abrilo para verificar tu cuenta y empezar a planificar.`
+              : "Revisá tu correo para encontrar el enlace de verificación y empezar a planificar."}
           </p>
 
           <div className="verification-actions">
