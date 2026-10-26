@@ -1,9 +1,10 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { beforeEach, describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Login from "../pages/login/Login";
 
 const mockNavigate = vi.fn();
+const mockIniciarSesion = vi.fn();
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual("react-router-dom");
@@ -13,7 +14,16 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
+vi.mock("../api", () => ({
+  iniciarSesion: (...args) => mockIniciarSesion(...args),
+}));
+
 describe("Login Component", () => {
+  beforeEach(() => {
+    mockNavigate.mockReset();
+    mockIniciarSesion.mockReset();
+  });
+
   it("renderiza el formulario con campos de email y contraseña", () => {
     render(
       <BrowserRouter>
@@ -41,18 +51,52 @@ describe("Login Component", () => {
     ).toBeInTheDocument();
   });
 
-  it("ejecuta el submit del formulario y navega hacia /my-trips", () => {
-    mockNavigate.mockClear();
-
+  it("inicia sesión con las credenciales ingresadas y navega solo si son válidas", async () => {
+    mockIniciarSesion.mockResolvedValueOnce({ token: "token-valido" });
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
 
-    const submitBtn = screen.getByRole("button", { name: /iniciar sesión/i });
-    fireEvent.click(submitBtn);
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
+      target: { value: "ana@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), {
+      target: { value: "clave-correcta" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /iniciar sesión/i }));
 
-    expect(mockNavigate).toHaveBeenCalledWith("/my-trips");
+    await waitFor(() => {
+      expect(mockIniciarSesion).toHaveBeenCalledWith(
+        "ana@example.com",
+        "clave-correcta"
+      );
+      expect(mockNavigate).toHaveBeenCalledWith("/my-trips");
+    });
+  });
+
+  it("no permite ingresar y muestra el error si el servidor rechaza las credenciales", async () => {
+    mockIniciarSesion.mockRejectedValueOnce(
+      new Error("Credenciales inválidas")
+    );
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
+      target: { value: "noexiste@example.com" },
+    });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), {
+      target: { value: "incorrecta" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /iniciar sesión/i }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Credenciales inválidas"
+    );
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

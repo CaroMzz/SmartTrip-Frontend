@@ -1,14 +1,36 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { iniciarSesion } from "../../api";
 import TravelHero from "../../components/TravelHero";
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Navegación directa al panel de viajes
-    navigate("/my-trips");
+    setError("");
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      await iniciarSesion(
+        formData.get("email").trim(),
+        formData.get("password")
+      );
+      navigate("/my-trips");
+    } catch (loginError) {
+      setError(
+        loginError instanceof Error
+          ? loginError.message
+          : "No se pudo iniciar sesión. Verificá tus credenciales e intentá nuevamente."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -32,7 +54,8 @@ function Login() {
                 id="email"
                 name="email"
                 placeholder="florencia@ejemplo.com"
-                defaultValue="florencia@ejemplo.com"
+                autoComplete="email"
+                required
               />
             </div>
 
@@ -44,12 +67,23 @@ function Login() {
                 id="password"
                 name="password"
                 placeholder="Ingresa tu contraseña"
-                defaultValue="password12345678"
+                autoComplete="current-password"
+                required
               />
             </div>
 
-            <button type="submit" className="submit-button">
-              Iniciar sesión
+            {error && (
+              <p className="login-error" role="alert">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Verificando..." : "Iniciar sesión"}
             </button>
           </form>
 
