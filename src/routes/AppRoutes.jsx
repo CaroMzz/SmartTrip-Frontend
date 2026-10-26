@@ -13,6 +13,7 @@ import TripCalendar from "../pages/trip-calendar/TripCalendar";
 import TripBudget from "../pages/trip-budget/TripBudget";
 import Profile from "../pages/profile/Profile";
 import ChangePassword from "../pages/change-password/ChangePassword";
+import Faq from "../pages/faq/Faq";
 
 
 function AppRoutes() {

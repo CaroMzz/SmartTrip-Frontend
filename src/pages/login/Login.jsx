@@ -56,6 +56,10 @@ function Login() {
           <p className="signup-link">
             ¿Todavia no tenés una cuenta? <Link to="/register">Creá tu cuenta</Link>
           </p>
+          <p className="help-link">
+            ¿Necesitás ayuda?{" "}
+            <Link to="/faq">Ver Centro de Ayuda (FAQ)</Link>
+          </p>
         </div>
       </section>
     </div>

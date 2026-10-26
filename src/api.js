@@ -1,7 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { getApiUrl } from "./config/api";
 
 async function solicitar(ruta, opciones = {}) {
-  const respuesta = await fetch(`${API_URL}${ruta}`, {
+  const respuesta = await fetch(`${getApiUrl()}${ruta}`, {
     ...opciones,
     headers: {
       "Content-Type": "application/json",

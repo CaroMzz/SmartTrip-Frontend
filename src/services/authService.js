@@ -1,7 +1,7 @@
-import API_URL from "../config/api";
+import { getApiUrl } from "../config/api";
 
 export async function registerUser(userData) {
-  const response = await fetch(`${API_URL}/auth/register`, {
+  const response = await fetch(`${getApiUrl()}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export async function registerUser(userData) {
 }
 
 export async function loginUser(credentials) {
-  const response = await fetch(`${API_URL}/auth/login`, {
+  const response = await fetch(`${getApiUrl()}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

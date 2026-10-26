@@ -66,12 +66,8 @@ function Registration() {
           </form>
 
           <p className="login-link">
-<<<<<<< HEAD:src/pages/Registration.jsx
             ¿Ya tenés una cuenta? {" "}
             <Link to="/">Iniciá sesión</Link>
-=======
-            ¿Ya tenés una cuenta? <Link to="/">Iniciá sesión</Link>
->>>>>>> 5b53afd890d4a8c31a02cbf26098d3ec8aa7560f:src/pages/registration/Registration.jsx
           </p>
         </div>
       </section>

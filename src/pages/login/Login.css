@@ -123,13 +123,22 @@
   font-size: 14px;
 }
 
-.signup-link a {
+.help-link {
+  margin-top: 12px;
+  text-align: center;
+  color: var(--muted-color);
+  font-size: 14px;
+}
+
+.signup-link a,
+.help-link a {
   color: var(--primary-color);
   font-weight: 700;
   text-decoration: none;
 }
 
-.signup-link a:hover {
+.signup-link a:hover,
+.help-link a:hover {
   text-decoration: underline;
 }
 
