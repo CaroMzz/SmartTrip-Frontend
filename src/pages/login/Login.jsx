@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TravelHero from "../../components/TravelHero";
 import "./Login.css";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Navegación directa al panel de viajes
+    navigate("/my-trips");
+  };
+
   return (
     <div className="login-page">
       <TravelHero />
@@ -15,7 +23,7 @@ function Login() {
 
           <p className="form-description">Inicia sesión y retomá tus planes</p>
 
-          <form className="login-form">
+          <form className="login-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Correo electrónico</label>
 
@@ -24,6 +32,7 @@ function Login() {
                 id="email"
                 name="email"
                 placeholder="florencia@ejemplo.com"
+                defaultValue="florencia@ejemplo.com"
               />
             </div>
 
@@ -35,6 +44,7 @@ function Login() {
                 id="password"
                 name="password"
                 placeholder="Ingresa tu contraseña"
+                defaultValue="password12345678"
               />
             </div>
 

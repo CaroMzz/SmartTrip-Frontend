@@ -43,6 +43,9 @@ function AppRoutes() {
       <Route path="/profile" element={<Profile />} />
 
       <Route path="/change-password" element={<ChangePassword />} />
+
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/ayuda" element={<Faq />} />
     </Routes>
   );
 }
