@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { iniciarSesion } from "../api";
-import TravelHero from "../components/TravelHero";
+import { iniciarSesion } from "../../api";
+import TravelHero from "../../components/TravelHero";
 import "./Login.css";
 
 function Login() {
@@ -10,23 +10,24 @@ function Login() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError("");
     setIsSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email").trim();
-    const contraseña = formData.get("password");
+    const formData = new FormData(e.currentTarget);
 
     try {
-      await iniciarSesion(email, contraseña);
-      navigate("/my-trips", { replace: true });
+      await iniciarSesion(
+        formData.get("email").trim(),
+        formData.get("password")
+      );
+      navigate("/my-trips");
     } catch (loginError) {
       setError(
         loginError instanceof Error
           ? loginError.message
-          : "No se pudo iniciar sesión. Intentá nuevamente."
+          : "No se pudo iniciar sesión. Verificá tus credenciales e intentá nuevamente."
       );
     } finally {
       setIsSubmitting(false);
@@ -43,12 +44,10 @@ function Login() {
 
           <h2>¡Qué bueno verte de nuevo!</h2>
 
-          <p className="form-description">
-            Inicia sesión para continuar planificando tu próxima aventura.
-          </p>
+          <p className="form-description">Inicia sesión y retomá tus planes</p>
 
           {location.state?.notice && (
-            <p className="form-notice" role="status">{location.state.notice}</p>
+            <p className="login-notice" role="status">{location.state.notice}</p>
           )}
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -78,15 +77,27 @@ function Login() {
               />
             </div>
 
-            {error && <p className="registration-error" role="alert">{error}</p>}
+            {error && (
+              <p className="login-error" role="alert">
+                {error}
+              </p>
+            )}
 
-            <button type="submit" className="submit-button" disabled={isSubmitting}>
-              {isSubmitting ? "Ingresando..." : "Iniciar sesión"}
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Verificando..." : "Iniciar sesión"}
             </button>
           </form>
 
           <p className="signup-link">
             ¿Todavia no tenés una cuenta? <Link to="/register">Creá tu cuenta</Link>
+          </p>
+          <p className="help-link">
+            ¿Necesitás ayuda?{" "}
+            <Link to="/faq">Ver Centro de Ayuda (FAQ)</Link>
           </p>
         </div>
       </section>

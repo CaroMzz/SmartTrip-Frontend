@@ -1,8 +1,9 @@
-import { clearSession, getToken, saveSession } from "./auth";
-
-const API_URL = (
-  import.meta.env.VITE_API_URL || "https://smarttrip-backend-naa5.onrender.com"
-).replace(/\/+$/, "");
+import { getApiUrl } from "./config/api";
+import {
+  clearSession,
+  getToken,
+  saveSession,
+} from "./auth";
 
 export class ApiError extends Error {
   constructor(message, status, errors = {}) {
@@ -14,17 +15,23 @@ export class ApiError extends Error {
 }
 
 async function solicitar(ruta, opciones = {}) {
-  const headers = new Headers(opciones.headers || {});
-  const token = getToken();
+  const { token, headers: customHeaders, ...fetchOptions } = opciones;
+  const headers = {
+    "Content-Type": "application/json",
+    ...(customHeaders || {}),
+  };
+  const sessionToken = token || getToken();
 
-  if (token) headers.set("Authorization", `Bearer ${token}`);
-  if (opciones.body && !headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+  if (sessionToken && !headers.Authorization) {
+    headers.Authorization = `Bearer ${sessionToken}`;
   }
 
   let respuesta;
   try {
-    respuesta = await fetch(`${API_URL}${ruta}`, { ...opciones, headers });
+    respuesta = await fetch(`${getApiUrl()}${ruta}`, {
+      ...fetchOptions,
+      headers,
+    });
   } catch (error) {
     throw new ApiError(
       error instanceof Error
@@ -41,7 +48,10 @@ async function solicitar(ruta, opciones = {}) {
       datos = JSON.parse(texto);
     } catch {
       if (respuesta.ok) {
-        throw new ApiError("El servidor devolvió una respuesta inválida.", respuesta.status);
+        throw new ApiError(
+          "El servidor devolvió una respuesta inválida.",
+          respuesta.status
+        );
       }
       datos = { mensaje: texto };
     }
@@ -62,9 +72,9 @@ async function solicitar(ruta, opciones = {}) {
   return datos;
 }
 
-const enviar = (metodo, cuerpo) => ({
-  method: metodo,
-  body: JSON.stringify(cuerpo),
+const enviar = (method, body) => ({
+  method,
+  body: JSON.stringify(body),
 });
 
 export const registrar = (datos) =>
@@ -81,25 +91,27 @@ export const iniciarSesion = async (email, contraseña) => {
     "/usuarios/login",
     enviar("POST", { email, contraseña })
   );
-  if (!respuesta.token || !respuesta.usuario) {
-    throw new ApiError("La respuesta de inicio de sesión no contiene la sesión.", 502);
+  if (!respuesta.token) {
+    throw new ApiError("La respuesta no contiene el token de sesión.", 502);
   }
-  saveSession(respuesta.token, respuesta.usuario);
+  saveSession(respuesta.token, respuesta.usuario || null);
   return respuesta;
 };
 
-export const cerrarSesion = () => solicitar("/usuarios/logout", { method: "POST" });
+export const cerrarSesion = () =>
+  solicitar("/usuarios/logout", { method: "POST" });
 
-export const obtenerMiPerfil = () => solicitar("/usuarios/me");
+export const obtenerMiPerfil = (token) =>
+  solicitar("/usuarios/me", token ? { token } : {});
 
 export const actualizarMiPerfil = (datos) =>
   solicitar("/usuarios/me", enviar("PATCH", datos));
 
 export const cambiarContrasena = (contrasenaActual, nuevaContrasena) =>
-  solicitar("/usuarios/me/contrasena", enviar("PATCH", {
-    contrasenaActual,
-    nuevaContrasena,
-  }));
+  solicitar(
+    "/usuarios/me/contrasena",
+    enviar("PATCH", { contrasenaActual, nuevaContrasena })
+  );
 
 export const buscarPaises = (consulta) =>
   solicitar(`/destinos/paises?q=${encodeURIComponent(consulta)}`);
@@ -111,7 +123,8 @@ export const buscarCiudades = (consulta, codigosPaises) =>
 
 export const obtenerViajes = () => solicitar("/viajes");
 
-export const obtenerViaje = (id) => solicitar(`/viajes/${encodeURIComponent(id)}`);
+export const obtenerViaje = (id) =>
+  solicitar(`/viajes/${encodeURIComponent(id)}`);
 
 export const crearViaje = (datos) =>
   solicitar("/viajes", enviar("POST", datos));

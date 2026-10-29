@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-
-import EmailVerification from "../pages/EmailVerification";
-import Login from "../pages/Login";
-import Registration from "../pages/Registration";
+import Faq from "../pages/faq/Faq";
+import EmailVerification from "../pages/email-verification/EmailVerification";
+import Login from "../pages/login/Login";
+import Registration from "../pages/registration/Registration";
 import {
   BudgetPreferences,
   CompareItineraries,
@@ -38,6 +38,8 @@ function AppRoutes() {
       <Route path="/email-verification" element={<EmailVerification />} />
       <Route path="/verify-email" element={<EmailVerification />} />
       <Route path="/confirmar-correo" element={<EmailVerification />} />
+      <Route path="/faq" element={<Faq />} />
+      <Route path="/ayuda" element={<Faq />} />
       <Route path="/my-trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
       <Route path="/new-trip" element={<ProtectedRoute><NewTrip /></ProtectedRoute>} />
       <Route path="/budget-preferences" element={<ProtectedRoute><BudgetPreferences /></ProtectedRoute>} />

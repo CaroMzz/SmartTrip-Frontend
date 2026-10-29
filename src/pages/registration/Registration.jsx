@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registrar } from "../api";
-import TravelHero from "../components/TravelHero";
+import { registrar } from "../../api";
+import TravelHero from "../../components/TravelHero";
 import "./Registration.css";
 
 function Registration() {
@@ -25,7 +25,6 @@ function Registration() {
       setError("Ingresá tu nombre completo.");
       return;
     }
-
     if (contraseña !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
       return;
@@ -36,7 +35,6 @@ function Registration() {
     }
 
     setIsSubmitting(true);
-
     try {
       const resultado = await registrar({ nombre, email, contraseña });
       navigate("/email-verification", {
@@ -57,17 +55,13 @@ function Registration() {
   return (
     <div className="registration-page">
       <TravelHero />
-
       <section className="registration-form-section">
         <div className="form-container">
           <p className="form-overline">BIENVENIDO A SMARTTRIP</p>
-
           <h2>Tu próximo viaje comienza acá.</h2>
-
           <p className="form-description">
             Creá tu cuenta y comenzá a planificar tu próxima aventura.
           </p>
-
           <form className="registration-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="fullName">Nombre completo</label>
@@ -82,7 +76,6 @@ function Registration() {
               />
               {fieldErrors.nombre && <small className="registration-error">{fieldErrors.nombre}</small>}
             </div>
-
             <div className="form-group">
               <label htmlFor="email">Correo electrónico</label>
               <input
@@ -95,7 +88,6 @@ function Registration() {
               />
               {fieldErrors.email && <small className="registration-error">{fieldErrors.email}</small>}
             </div>
-
             <div className="form-group">
               <label htmlFor="password">Contraseña</label>
               <input
@@ -109,11 +101,8 @@ function Registration() {
               />
               {fieldErrors.contraseña && <small className="registration-error">{fieldErrors.contraseña}</small>}
             </div>
-
             <div className="form-group">
-              <label htmlFor="confirmPassword">
-                Confirmar contraseña
-              </label>
+              <label htmlFor="confirmPassword">Confirmar contraseña</label>
               <input
                 type="password"
                 id="confirmPassword"
@@ -124,25 +113,13 @@ function Registration() {
                 required
               />
             </div>
-
-            {error && (
-              <p className="registration-error" role="alert">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={isSubmitting}
-            >
+            {error && <p className="registration-error" role="alert">{error}</p>}
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
               {isSubmitting ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>
-
           <p className="login-link">
-            ¿Ya tenés una cuenta? {" "}
-            <Link to="/">Iniciá sesión</Link>
+            ¿Ya tenés una cuenta? <Link to="/">Iniciá sesión</Link>
           </p>
         </div>
       </section>

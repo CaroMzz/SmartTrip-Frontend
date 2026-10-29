@@ -18,7 +18,11 @@ export const getStoredUser = () => {
 
 export const saveSession = (token, user) => {
   localStorage.setItem(TOKEN_KEY, token);
-  updateStoredUser(user);
+  if (user) {
+    updateStoredUser(user);
+  } else {
+    localStorage.removeItem(USER_KEY);
+  }
 };
 
 export const updateStoredUser = (user) => {
