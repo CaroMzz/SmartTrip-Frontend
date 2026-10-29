@@ -1,16 +1,35 @@
-# React + Vite
+# SmartTrip Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación React para crear viajes, configurar presupuesto y preferencias, comparar itinerarios y consultar el mapa, calendario y estimaciones del viaje.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js y npm
+- Backend SmartTrip accesible en `VITE_API_URL`
 
-## React Compiler
+La URL predeterminada es `https://smarttrip-backend-naa5.onrender.com`. Para usar otro backend, definí `VITE_API_URL` en un archivo `.env` en la raíz.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+La documentación interactiva del backend está disponible en `/api-docs` en la URL configurada.
 
-## Expanding the ESLint configuration
+## Desarrollo
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+npm install
+npm run dev
+```
+
+## Validación
+
+```sh
+npm run lint
+npm run build
+```
+
+## Flujos principales
+
+- Registro, confirmación y reenvío del correo, inicio y cierre de sesión.
+- La sesión se conserva en `localStorage`; el viaje seleccionado se conserva en `sessionStorage`.
+- Las pantallas privadas requieren una sesión y un `401` limpia la sesión vencida.
+- Desde Mis viajes se puede crear un viaje con países y ciudades del autocompletado, configurar presupuesto y seis prioridades, generar y elegir alternativas.
+- El itinerario incluye tramos y mapa interactivo con Leaflet/OpenStreetMap; sus ciudades abren una ficha de destino.
+- El perfil, el cambio de contraseña, el calendario y el presupuesto consultan los endpoints del backend.

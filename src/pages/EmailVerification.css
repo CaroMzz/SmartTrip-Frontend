@@ -60,14 +60,18 @@
 
 .verification-button {
   width: 100%;
-  min-height: 25px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
   font-family: inherit;
-  font-size: 7px;
+  font-size: 12px;
   font-weight: 600;
-  text-align: left;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -79,6 +83,26 @@
 .verification-button.secondary {
   color: #18383d;
   background-color: #d7f3f7;
+}
+
+.verification-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.verification-error,
+.verification-success {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.verification-error {
+  color: #a63e3e;
+}
+
+.verification-success {
+  color: #287044;
 }
 
 .verification-help {

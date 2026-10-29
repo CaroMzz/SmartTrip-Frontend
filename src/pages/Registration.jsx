@@ -7,11 +7,13 @@ import "./Registration.css";
 function Registration() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setFieldErrors({});
 
     const formData = new FormData(event.currentTarget);
     const nombre = formData.get("fullName").trim();
@@ -28,13 +30,20 @@ function Registration() {
       setError("Las contraseñas no coinciden.");
       return;
     }
+    if (contraseña.length < 15) {
+      setError("La contraseña debe tener al menos 15 caracteres.");
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      await registrar({ nombre, email, contraseña });
-      navigate("/verify-email", { state: { email } });
+      const resultado = await registrar({ nombre, email, contraseña });
+      navigate("/email-verification", {
+        state: { email, correoEnviado: resultado.correoEnviado },
+      });
     } catch (registrationError) {
+      setFieldErrors(registrationError?.errors || {});
       setError(
         registrationError instanceof Error
           ? registrationError.message
@@ -71,6 +80,7 @@ function Registration() {
                 minLength={2}
                 required
               />
+              {fieldErrors.nombre && <small className="registration-error">{fieldErrors.nombre}</small>}
             </div>
 
             <div className="form-group">
@@ -83,6 +93,7 @@ function Registration() {
                 autoComplete="email"
                 required
               />
+              {fieldErrors.email && <small className="registration-error">{fieldErrors.email}</small>}
             </div>
 
             <div className="form-group">
@@ -93,9 +104,10 @@ function Registration() {
                 name="password"
                 placeholder="Crea una contraseña"
                 autoComplete="new-password"
-                minLength={8}
+                minLength={15}
                 required
               />
+              {fieldErrors.contraseña && <small className="registration-error">{fieldErrors.contraseña}</small>}
             </div>
 
             <div className="form-group">
@@ -108,7 +120,7 @@ function Registration() {
                 name="confirmPassword"
                 placeholder="Confirma tu contraseña"
                 autoComplete="new-password"
-                minLength={8}
+                minLength={15}
                 required
               />
             </div>

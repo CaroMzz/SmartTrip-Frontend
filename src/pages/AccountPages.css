@@ -1,0 +1,54 @@
+.account-panel {
+  width: min(680px, 100%);
+  display: grid;
+  gap: 18px;
+  padding: clamp(20px, 4vw, 32px);
+  border: 1px solid #e7ece8;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 18px #2b523708;
+}
+
+.account-form > label {
+  display: grid;
+  gap: 7px;
+  color: #34443c;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.account-field-error {
+  color: #a13d37;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.account-priorities {
+  padding-top: 6px;
+}
+
+.account-priorities .priority-list {
+  margin-top: 15px;
+}
+
+.account-secondary-link {
+  color: #32735d;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+}
+
+.account-secondary-link:hover {
+  text-decoration: underline;
+}
+
+.account-hint,
+.account-loading {
+  color: #79867f;
+  font-size: 12px;
+}
+
+.password-form {
+  width: min(520px, 100%);
+}
