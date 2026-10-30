@@ -17,6 +17,11 @@
   font-weight: 650;
 }
 
+.account-field-hint {
+  color: #5f6d66;
+  font-size: 12px;
+}
+
 .account-field-error {
   padding: 8px 10px;
   border-left: 3px solid #d99a3d;
@@ -49,7 +54,7 @@
 
 .account-hint,
 .account-loading {
-  color: #79867f;
+  color: #5f6d66;
   font-size: 12px;
 }
 

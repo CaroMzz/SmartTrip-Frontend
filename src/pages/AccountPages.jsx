@@ -7,7 +7,8 @@ import {
 } from "../api";
 import { updateStoredUser } from "../auth";
 import WorkspaceLayout from "../components/WorkspaceLayout";
-import { Notice, PrioritySliders } from "./travelShared";
+import { Notice, PrioritySliders, TransportOptions } from "./travelShared";
+import { useOpciones } from "./tripOptions";
 import {
   defaultPriorities,
   normalizePriorities,
@@ -16,8 +17,11 @@ import {
 import "./AccountPages.css";
 
 export function Profile() {
+  const { transportes, criterios } = useOpciones();
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailPassword, setEmailPassword] = useState("");
   const [transport, setTransport] = useState("tren");
   const [priorities, setPriorities] = useState(defaultPriorities);
   const [loading, setLoading] = useState(true);
@@ -33,6 +37,7 @@ export function Profile() {
         const preferences = user.preferencias || {};
         setProfile(user);
         setName(user.nombre || "");
+        setEmail(user.correo || user.email || "");
         setTransport(preferences.transportePreferido || "tren");
         setPriorities(normalizePriorities(preferences));
       })
@@ -45,13 +50,18 @@ export function Profile() {
     setError("");
     setSuccess("");
     setFieldErrors({});
+    const newEmail = email.trim().toLowerCase();
+    const emailChanged = newEmail !== (profile?.correo || profile?.email || "");
     setSaving(true);
     try {
       const response = await actualizarMiPerfil({
         nombre: name.trim(),
         transportePreferido: transport,
         prioridades: priorities,
+        // El correo solo se envía si cambió: el backend exige la contraseña actual para cambiarlo.
+        ...(emailChanged ? { email: newEmail, contrasenaActual: emailPassword } : {}),
       });
+      setEmailPassword("");
       const updatedProfile = {
         ...profile,
         ...(response.usuario || {}),
@@ -65,7 +75,9 @@ export function Profile() {
       };
       setProfile(updatedProfile);
       updateStoredUser(updatedProfile);
-      setSuccess(response.mensaje || "Tu perfil se actualizó correctamente.");
+      setSuccess(emailChanged
+        ? "Tu perfil se actualizó. Desde ahora iniciá sesión con el correo nuevo; cerramos tus otras sesiones."
+        : response.mensaje || "Tu perfil se actualizó correctamente.");
     } catch (saveError) {
       setError(saveError.message);
       setFieldErrors(saveError.errors || {});
@@ -87,20 +99,29 @@ export function Profile() {
           </label>
           <label>
             <span>Correo electrónico</span>
-            <input value={profile?.correo || profile?.email || ""} readOnly />
+            <input type="email" maxLength="320" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" />
+            {fieldErrors.email && <small className="account-field-error">{fieldErrors.email}</small>}
           </label>
+          {email.trim().toLowerCase() !== (profile?.correo || profile?.email || "") && (
+            <div>
+              <label>
+                <span>Contraseña actual</span>
+                <input type="password" value={emailPassword} onChange={(event) => setEmailPassword(event.target.value)} required autoComplete="current-password" aria-describedby="email-password-hint" />
+              </label>
+              <small className="account-field-hint" id="email-password-hint">Para cambiar el correo confirmá tu contraseña. Se cerrarán tus otras sesiones.</small>
+            </div>
+          )}
           <label>
             <span>Transporte preferido</span>
             <select value={transport} onChange={(event) => setTransport(event.target.value)}>
-              <option value="tren">Tren</option>
-              <option value="avion">Avión</option>
-              <option value="auto">Auto</option>
+              <TransportOptions transportes={transportes} />
             </select>
             {fieldErrors.transportePreferido && <small className="account-field-error">{fieldErrors.transportePreferido}</small>}
           </label>
           <section className="account-priorities">
             <div className="trip-section-heading"><h2>Mis prioridades de viaje</h2><p>Se usarán como valores iniciales para tus viajes nuevos.</p></div>
             <PrioritySliders
+              criterios={criterios}
               values={priorities}
               onChange={(key, value) => setPriorities((current) => rebalancePriorities(current, key, value))}
             />

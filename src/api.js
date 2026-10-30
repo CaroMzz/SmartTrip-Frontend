@@ -158,8 +158,16 @@ export const seleccionarItinerario = (id, itinerarioId) =>
 export const obtenerItinerario = (id) =>
   solicitar(`/viajes/${encodeURIComponent(id)}/itinerario`);
 
-export const obtenerDestino = (idExterno) =>
-  solicitar(`/destinos/${encodeURIComponent(idExterno)}`);
+// Para destinos de OpenStreetMap el backend necesita el nombre y el país para ubicar el lugar.
+export const obtenerDestino = (idExterno, { nombre, pais } = {}) => {
+  const parametros = new URLSearchParams();
+  if (nombre) parametros.set("nombre", nombre);
+  if (pais) parametros.set("pais", pais);
+  const consulta = parametros.toString();
+  return solicitar(`/destinos/${encodeURIComponent(idExterno)}${consulta ? `?${consulta}` : ""}`);
+};
+
+export const obtenerOpciones = () => solicitar("/opciones");
 
 export const obtenerCalendario = (id) =>
   solicitar(`/viajes/${encodeURIComponent(id)}/calendario`);

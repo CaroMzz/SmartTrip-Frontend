@@ -1,26 +1,25 @@
+import { CRITERIOS_BASE } from "./tripOptions";
+
+export function TransportOptions({ transportes }) {
+  return transportes.map(({ tipo, etiqueta }) => <option key={tipo} value={tipo}>{etiqueta}</option>);
+}
+
 export function Notice({ children, type = "error" }) {
   if (!children) return null;
   return <p className={`trip-notice ${type}`} role={type === "error" ? "alert" : "status"}>{children}</p>;
 }
 
-export function PrioritySliders({ values, onChange }) {
+export function PrioritySliders({ values, onChange, criterios = CRITERIOS_BASE }) {
   return (
     <div className="priority-list">
-      {[
-        ["ahorro", "Minimizar costos"],
-        ["distancia", "Reducir kilómetros recorridos"],
-        ["atractivos", "Maximizar lugares turísticos"],
-        ["alojamiento", "Minimizar cambios de alojamiento"],
-        ["tren", "Priorizar tren sobre avión"],
-        ["panoramicas", "Priorizar rutas panorámicas"],
-      ].map(([key, label]) => (
+      {criterios.map(({ clave: key, etiqueta: label }) => (
         <label className="priority-control" key={key}>
-          <span><strong>{label}</strong><output>{values[key]}%</output></span>
+          <span><strong>{label}</strong><output>{values[key] ?? 0}%</output></span>
           <input
             type="range"
             min="0"
             max="100"
-            value={values[key]}
+            value={values[key] ?? 0}
             onChange={(event) => onChange(key, Number(event.target.value))}
             aria-label={label}
           />

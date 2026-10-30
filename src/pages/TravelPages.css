@@ -85,7 +85,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  color: #738078;
+  color: #5f6d66;
   font-size: 13px;
 }
 
@@ -121,13 +121,13 @@
 .trip-empty p {
   max-width: 470px;
   margin-bottom: 19px;
-  color: #718078;
+  color: #5f6d66;
   font-size: 13px;
 }
 
 .trip-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(245px, 100%), 1fr));
   gap: 16px;
 }
 
@@ -201,7 +201,7 @@
 }
 
 .trip-card-meta {
-  color: #8a9690;
+  color: #5f6d66;
   font-size: 11px;
 }
 
@@ -252,7 +252,7 @@
 .trip-panel-heading p,
 .trip-section-heading p {
   margin: 0;
-  color: #7a8880;
+  color: #5f6d66;
   font-size: 12px;
 }
 
@@ -290,7 +290,7 @@
 }
 
 .trip-field small {
-  color: #89958e;
+  color: #5f6d66;
   font-size: 10px;
   font-weight: 400;
 }
@@ -319,7 +319,7 @@
 }
 
 .trip-field input:disabled {
-  color: #9da69f;
+  color: #5f6d66;
   background: #f6f7f5;
 }
 
@@ -349,7 +349,7 @@
   padding: 10px 12px;
   border: 1px solid #dce5df;
   border-radius: 8px;
-  color: #748179;
+  color: #5f6d66;
   background: #fff;
   font-size: 11px;
 }
@@ -426,7 +426,7 @@
   justify-content: space-between;
   padding-top: 11px;
   border-top: 1px solid #e7ece8;
-  color: #738078;
+  color: #5f6d66;
   font-size: 12px;
 }
 
@@ -457,7 +457,7 @@
 }
 
 .comparison-table thead th {
-  color: #77857d;
+  color: #5f6d66;
   background: #f7f9f6;
   font-size: 10px;
   font-weight: 700;
@@ -469,7 +469,7 @@
 }
 
 .comparison-table td {
-  color: #66746d;
+  color: #5f6d66;
 }
 
 .comparison-table tr:last-child > * {
@@ -533,7 +533,7 @@
 
 .map-attribution {
   margin: 10px 2px 0;
-  color: #839087;
+  color: #5f6d66;
   font-size: 10px;
 }
 
@@ -568,7 +568,7 @@
 
 .itinerary-cities button > span {
   grid-row: span 2;
-  color: #43836c;
+  color: #327660;
   font-size: 11px;
   font-weight: 800;
 }
@@ -578,7 +578,7 @@
 }
 
 .itinerary-cities button small {
-  color: #87938c;
+  color: #5f6d66;
   font-size: 10px;
 }
 
@@ -601,12 +601,12 @@
 }
 
 .itinerary-legs article > span:not(.itinerary-leg-number) {
-  color: #69776f;
+  color: #5f6d66;
 }
 
 .itinerary-legs p {
   margin-top: 4px;
-  color: #849088;
+  color: #5f6d66;
   font-size: 11px;
 }
 
@@ -642,6 +642,9 @@
   position: relative;
   width: min(680px, 100%);
   max-height: 90vh;
+  /* En Safari de iPhone 90vh mide la pantalla completa, no el área visible: la ficha quedaba más
+     alta que la ventana y el botón de cerrar fuera de ella (DEF-17). */
+  max-height: min(90vh, calc(100dvh - 40px));
   overflow-y: auto;
   padding: 28px;
   border-radius: 16px;
@@ -650,9 +653,12 @@
 }
 
 .city-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 16px;
+  /* Fijo arriba a la derecha mientras se desplaza el contenido de la ficha. */
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  float: right;
+  margin: -14px -12px 0 8px;
   width: 34px;
   height: 34px;
   border: 0;
@@ -671,7 +677,7 @@
 
 .city-description,
 .city-suggested-time {
-  color: #68786f;
+  color: #5f6d66;
   font-size: 13px;
 }
 
@@ -711,7 +717,7 @@
 .city-interest article p,
 .city-interest article small,
 .city-source {
-  color: #76847c;
+  color: #5f6d66;
   font-size: 11px;
 }
 
@@ -763,7 +769,7 @@
 }
 
 .calendar-day-date span {
-  color: #43836c;
+  color: #327660;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -782,7 +788,7 @@
 
 .calendar-day-content p {
   margin-top: 4px;
-  color: #78867e;
+  color: #5f6d66;
   font-size: 11px;
 }
 
@@ -820,7 +826,7 @@
 }
 
 .budget-summary span {
-  color: #7c8981;
+  color: #5f6d66;
   font-size: 11px;
 }
 
@@ -879,7 +885,7 @@
 .budget-category > div:first-child {
   display: flex;
   justify-content: space-between;
-  color: #65756b;
+  color: #5f6d66;
   font-size: 12px;
 }
 
@@ -890,7 +896,7 @@
 .budget-notes {
   margin: 20px 0 0;
   padding-left: 18px;
-  color: #68786f;
+  color: #5f6d66;
   font-size: 12px;
 }
 
