@@ -155,7 +155,7 @@ export function ChangePassword() {
 
   return (
     <WorkspaceLayout title="Cambiar contraseña" description="Elegí una contraseña segura de al menos 15 caracteres.">
-      <form className="account-form account-panel password-form" onSubmit={submit}>
+      <form className="account-form account-panel password-form" noValidate onSubmit={submit}>
         <Notice>{error}</Notice>
         {success && <Notice type="success">{success}</Notice>}
         <label>

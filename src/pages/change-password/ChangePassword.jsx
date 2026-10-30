@@ -14,7 +14,7 @@ function ChangePassword() {
     const newPassword = values.get("new-password");
     const confirmPassword = values.get("confirm-password");
 
-    if (newPassword !== confirmPassword) {
+    if (!currentPassword || !newPassword || !confirmPassword) {`r`n      setMessageType("error");`r`n      setMessage("Completá los tres campos para continuar.");`r`n      return;`r`n    }`r`n`r`n    if (newPassword.length < 8) {`r`n      setMessageType("error");`r`n      setMessage("La nueva contraseña debe tener al menos 8 caracteres.");`r`n      return;`r`n    }`r`n`r`n    if (newPassword !== confirmPassword) {
       setMessageType("error");
       setMessage("La nueva contraseña y su confirmación no coinciden.");
       return;
@@ -60,7 +60,7 @@ function ChangePassword() {
               </div>
             </div>
 
-            <form className="change-password-form" onSubmit={handleSubmit}>
+            <form className="change-password-form" noValidate onSubmit={handleSubmit}>
               <PasswordField
                 id="current-password"
                 name="current-password"
@@ -140,3 +140,4 @@ function PasswordField({
 }
 
 export default ChangePassword;
+

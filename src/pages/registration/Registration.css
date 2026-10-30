@@ -136,6 +136,16 @@ p.registration-error[role="alert"] {
   background: #fff8e9;
 }
 
+.registration-field-notice {
+  padding: 8px 10px;
+  border-left: 3px solid #d99a3d;
+  border-radius: 0 7px 7px 0;
+  color: #76521d;
+  background: #fff8e9;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .login-link {
   margin-top: 25px;
   text-align: center;

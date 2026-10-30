@@ -133,6 +133,16 @@
   line-height: 1.55;
 }
 
+.login-field-notice {
+  padding: 8px 10px;
+  border-left: 3px solid #d99a3d;
+  border-radius: 0 7px 7px 0;
+  color: #76521d;
+  background: #fff8e9;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .login-notice {
   margin: 0 0 16px;
   padding: 12px;

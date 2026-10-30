@@ -11,18 +11,22 @@
 
 .trip-notice {
   margin: 0 0 16px;
-  padding: 12px 14px;
-  border: 1px solid #f1ceca;
-  border-radius: 9px;
-  color: #8d3933;
-  background: #fff4f2;
+  padding: 14px 16px;
+  border: 1px solid #f0d7a9;
+  border-left: 4px solid #d99a3d;
+  border-radius: 10px;
+  color: #76521d;
+  background: linear-gradient(110deg, #fff8e9, #fffdf7);
   font-size: 13px;
+  line-height: 1.55;
+  box-shadow: 0 4px 14px rgba(87, 67, 32, 0.05);
 }
 
 .trip-notice.info {
-  border-color: #d7e8dc;
+  border-color: #cfe5dd;
+  border-left-color: #32806d;
   color: #3e6e52;
-  background: #f0f7f1;
+  background: linear-gradient(110deg, #eef8f3, #fbfdf9);
 }
 
 .trip-notice.success {
