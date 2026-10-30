@@ -109,7 +109,12 @@
 }
 
 .verification-error {
-  color: #a63e3e;
+  padding: 12px 14px;
+  border: 1px solid #f1d3a4;
+  border-left: 4px solid #d99a3d;
+  border-radius: 10px;
+  color: #76521d;
+  background: #fff8e9;
 }
 
 .verification-success {

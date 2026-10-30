@@ -18,7 +18,11 @@
 }
 
 .account-field-error {
-  color: #a13d37;
+  padding: 8px 10px;
+  border-left: 3px solid #d99a3d;
+  border-radius: 0 7px 7px 0;
+  color: #76521d;
+  background: #fff8e9;
   font-size: 11px;
   font-weight: 400;
 }

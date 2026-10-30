@@ -123,9 +123,14 @@
 
 .login-error {
   margin: 0;
-  color: #b42318;
-  font-size: 14px;
-  line-height: 1.5;
+  padding: 12px 14px;
+  border: 1px solid #f1d3a4;
+  border-left: 4px solid #d99a3d;
+  border-radius: 10px;
+  color: #76521d;
+  background: #fff8e9;
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .login-notice {
