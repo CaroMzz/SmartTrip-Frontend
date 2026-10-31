@@ -3,7 +3,9 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import {
   BudgetPreferences,
+  CompareItineraries,
   EditTrip,
+  Itinerary,
   MyTrips,
   NewTrip,
   TripCalendar,
@@ -16,7 +18,10 @@ const api = vi.hoisted(() => ({
   buscarCiudades: vi.fn(),
   buscarPaises: vi.fn(),
   cerrarSesion: vi.fn(),
+  generarItinerarios: vi.fn(),
   obtenerCalendario: vi.fn(),
+  obtenerItinerario: vi.fn(),
+  obtenerItinerarios: vi.fn(),
   obtenerMiPerfil: vi.fn(),
   obtenerOpciones: vi.fn(),
   obtenerViaje: vi.fn(),
@@ -29,6 +34,12 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("../api", () => api);
+
+// Leaflet necesita medidas reales del navegador; para estas pruebas alcanza con el contenido de la página.
+vi.mock("react-leaflet", () => {
+  const Box = ({ children }) => <div>{children}</div>;
+  return { MapContainer: Box, Marker: Box, Popup: Box, Polyline: () => null, TileLayer: () => null, useMap: () => ({ fitBounds() {}, setView() {} }) };
+});
 
 const renderPage = (page) => render(<MemoryRouter>{page}</MemoryRouter>);
 
@@ -114,6 +125,34 @@ describe("Pantallas de viaje", () => {
 
     expect(await screen.findByRole("link", { name: "Editar viaje" })).toHaveAttribute("href", "/edit-trip");
     expect(screen.getByRole("link", { name: "Presupuesto y preferencias" })).toHaveAttribute("href", "/budget-preferences");
+  });
+
+  it("avisa en Itinerario y Comparar que la distancia es aproximada (DEF-34)", async () => {
+    const aviso = "La distancia une coordenadas en línea aproximada; no es una ruta de navegación.";
+    const alternativa = {
+      id: "41", tipo: "equilibrada", recomendada: true, metodoRuta: "aproximacion_geografica", notas: [aviso],
+      metricas: { distanciaTotalKm: 1446.2 }, ciudades: [{ idExterno: "local-FR-paris", nombre: "Paris", pais: "Francia", latitud: 48.85, longitud: 2.35 }],
+      tramos: [{ id: "1", origen: "Paris", destino: "Niza", transporte: "auto", distanciaKm: 856.4, tiempoHoras: 11.6, costoUsd: 154.15 }],
+    };
+    api.obtenerItinerario.mockResolvedValue({ itinerario: alternativa, geometria: null });
+    api.obtenerItinerarios.mockResolvedValue({ itinerarios: [alternativa, { ...alternativa, id: "42", tipo: "mas_ahorro", recomendada: false }] });
+
+    const itinerario = renderPage(<Itinerary />);
+    expect(await screen.findByText(aviso)).toBeInTheDocument();
+    expect(screen.getByText("856.4 km · 11.6 h")).toBeInTheDocument();
+    itinerario.unmount();
+
+    renderPage(<CompareItineraries />);
+    expect(await screen.findAllByText(aviso)).toHaveLength(1);
+  });
+
+  it("no muestra aclaraciones de recorrido si el backend no las envía", async () => {
+    api.obtenerItinerario.mockResolvedValue({ itinerario: { id: "41", ciudades: [], tramos: [] } });
+
+    renderPage(<Itinerary />);
+
+    expect(await screen.findByRole("heading", { name: "Tramos del viaje" })).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Aclaraciones del recorrido" })).not.toBeInTheDocument();
   });
 
   it("permite editar desde la tarjeta un viaje con itinerario elegido (DEF-31)", async () => {

@@ -594,6 +594,13 @@ function getItineraries(response) {
   return response.itinerarios || response.alternativas || [];
 }
 
+// Aclaraciones del backend sobre el recorrido, por ejemplo que sin OpenRouteService la distancia une las
+// ciudades en línea aproximada (DEF-34).
+function RouteNotes({ notes }) {
+  if (!notes?.length) return null;
+  return <ul className="route-notes" aria-label="Aclaraciones del recorrido">{notes.map((note) => <li key={note}>{note}</li>)}</ul>;
+}
+
 export function CompareItineraries() {
   const navigate = useNavigate();
   const id = getCurrentTripId();
@@ -650,6 +657,7 @@ export function CompareItineraries() {
     <WorkspaceLayout title="Comparar itinerarios" description="Elegí la alternativa que mejor se adapta a tus prioridades.">
       <Notice>{error}</Notice>
       <TripActions />
+      <RouteNotes notes={[...new Set(itineraries.flatMap((option) => option.notas || []))]} />
       {!itineraries.length ? <div className="trip-empty"><h2>No se generaron alternativas</h2><button className="trip-button primary" onClick={() => window.location.reload()} type="button">Intentar nuevamente</button></div> : (
         <div className="comparison-scroll">
           <table className="comparison-table">
@@ -860,6 +868,7 @@ export function Itinerary() {
 
           <section className="trip-panel">
             <div className="trip-section-heading"><h2>Tramos del viaje</h2><p>En el orden de tu itinerario. Las excursiones son de ida y vuelta.</p></div>
+            <RouteNotes notes={itinerary.notas} />
             <div className="itinerary-legs">
               {(itinerary.tramos || []).map((leg, index) => (
                 <article key={leg.id || `${leg.origen}-${leg.destino}-${index}`}>

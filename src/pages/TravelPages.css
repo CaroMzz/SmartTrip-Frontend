@@ -904,6 +904,20 @@
   margin-top: 6px;
 }
 
+.route-notes {
+  margin: 0 0 16px;
+  padding: 10px 14px 10px 30px;
+  border-left: 3px solid #327660;
+  border-radius: 6px;
+  background: #f1f7f4;
+  color: #3d4a44;
+  font-size: 13px;
+}
+
+.route-notes li + li {
+  margin-top: 4px;
+}
+
 @media (max-width: 700px) {
   .trip-form-columns,
   .budget-summary {
