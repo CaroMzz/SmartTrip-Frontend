@@ -126,6 +126,9 @@ export const obtenerViajes = () => solicitar("/viajes");
 export const obtenerViaje = (id) =>
   solicitar(`/viajes/${encodeURIComponent(id)}`);
 
+export const verificarAutoDisponible = (id) =>
+  solicitar(`/viajes/${encodeURIComponent(id)}/auto-disponible`);
+
 export const crearViaje = (datos) =>
   solicitar("/viajes", enviar("POST", datos));
 

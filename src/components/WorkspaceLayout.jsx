@@ -45,7 +45,7 @@ function WorkspaceLayout({ title, description, children }) {
     <div className="workspace">
       <aside className="workspace-sidebar">
         <NavLink className="workspace-brand" to="/my-trips" aria-label="SmartTrip, inicio">
-          <span className="workspace-brand-mark">✦</span>
+          <img className="workspace-brand-mark" src="/favicon.svg" alt="" aria-hidden="true" />
           <span>SmartTrip</span>
         </NavLink>
 

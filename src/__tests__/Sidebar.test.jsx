@@ -12,6 +12,10 @@ describe("Sidebar Component", () => {
     );
 
     expect(screen.getByText("SmartTrip")).toBeInTheDocument();
+    expect(document.querySelector(".sidebar-brand-icon")).toHaveAttribute(
+      "src",
+      "/favicon.svg"
+    );
     expect(screen.getByRole("link", { name: /mis viajes/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /mi perfil/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /ayuda y faq/i })).toBeInTheDocument();

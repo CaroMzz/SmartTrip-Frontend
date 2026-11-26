@@ -10,7 +10,7 @@ function TravelHero({
   return (
     <section className="travel-hero">
       <div className="brand">
-        <span className="brand-icon">✦</span>
+        <img className="brand-icon" src="/favicon.svg" alt="" aria-hidden="true" />
         <span className="brand-name">SmartTrip</span>
       </div>
 

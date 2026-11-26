@@ -21,8 +21,10 @@
 }
 
 .brand-icon {
-  font-size: 23px;
-  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  object-fit: cover;
 }
 
 .hero-content {

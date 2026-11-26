@@ -22,13 +22,9 @@
 .sidebar-brand-icon {
   width: 28px;
   height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  color: #ffffff;
-  background-color: #08777c;
-  font-size: 14px;
+  flex: none;
+  border-radius: 6px;
+  object-fit: cover;
 }
 
 .sidebar-section-title {
