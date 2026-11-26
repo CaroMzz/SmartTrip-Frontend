@@ -19,6 +19,7 @@ import {
   obtenerViaje,
   obtenerViajes,
   seleccionarItinerario,
+  verificarAutoDisponible,
 } from "../api";
 import { getCurrentTripId, setCurrentTripId } from "../auth";
 import WorkspaceLayout from "../components/WorkspaceLayout";
@@ -462,38 +463,120 @@ export function EditTrip() {
 
 export function BudgetPreferences() {
   const navigate = useNavigate();
-  const id = getCurrentTripId();
+  const tripId = getCurrentTripId();
+  const [trip, setTrip] = useState(null);
   const [budget, setBudget] = useState("");
   const [transport, setTransport] = useState("tren");
   const [priorities, setPriorities] = useState(defaultPriorities);
-  const [loading, setLoading] = useState(Boolean(id));
+  const [loading, setLoading] = useState(Boolean(tripId));
+  const [estadoAuto, setEstadoAuto] = useState("cargando");
+  const [mensajeAuto, setMensajeAuto] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
   useEffect(() => {
-    if (!id) return;
-    obtenerMiPerfil()
-      .then((response) => {
-        const profile = response.usuario || response;
-        setPriorities(normalizePriorities(profile.preferencias));
-      })
-      .catch((requestError) => setError(requestError.message))
-      .finally(() => setLoading(false));
-  }, [id]);
+    if (!tripId) {
+      setError("No hay un viaje en curso. Creá uno para continuar.");
+      setEstadoAuto("no_verificable");
+      setTransport("avion");
+      setLoading(false);
+      return undefined;
+    }
+
+    let active = true;
+    setLoading(true);
+
+    async function loadTripAndPreferences() {
+      const [tripResult, profileResult] = await Promise.allSettled([
+        obtenerViaje(tripId),
+        obtenerMiPerfil(),
+      ]);
+
+      if (!active) return;
+
+      let viaje = null;
+      if (tripResult.status === "rejected") {
+        setError(tripResult.reason.message);
+      } else {
+        viaje = tripResult.value.viaje || tripResult.value;
+        setTrip(viaje);
+        setBudget(String(viaje.presupuestoTotal ?? ""));
+      }
+
+      if (profileResult.status === "fulfilled") {
+        const profile = profileResult.value.usuario || profileResult.value;
+        setPriorities(
+          normalizePriorities(viaje?.prioridades || profile.preferencias)
+        );
+      } else if (tripResult.status === "fulfilled") {
+        setError(profileResult.reason.message);
+      }
+
+      if (tripResult.status === "fulfilled") {
+        let resultado;
+        try {
+          resultado = await verificarAutoDisponible(tripId);
+        } catch {
+          resultado = {
+            estado: "no_verificable",
+            mensaje: "No pudimos comprobar la ruta. Por ahora, elegí avión.",
+          };
+        }
+
+        if (!active) return;
+
+        setEstadoAuto(resultado.estado);
+        setMensajeAuto(resultado.mensaje || "");
+        setTransport(
+          resultado.estado === "disponible"
+            ? viaje.transportePreferido || "tren"
+            : "avion"
+        );
+      } else {
+        setEstadoAuto("no_verificable");
+        setMensajeAuto("No pudimos comprobar la ruta. Por ahora, elegí avión.");
+        setTransport("avion");
+      }
+
+      setLoading(false);
+    }
+
+    loadTripAndPreferences().catch((requestError) => {
+      if (!active) return;
+      setError(requestError.message);
+      setEstadoAuto("no_verificable");
+      setMensajeAuto("No pudimos comprobar la ruta. Por ahora, elegí avión.");
+      setTransport("avion");
+      setLoading(false);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [tripId]);
+
+  const opcionesTransporte =
+    estadoAuto === "disponible"
+      ? [
+          { key: "tren", label: "Tren", icon: "🚆" },
+          { key: "avion", label: "Avión", icon: "✈️" },
+          { key: "auto", label: "Auto", icon: "🚗" },
+        ]
+      : [{ key: "avion", label: "Avión", icon: "✈️" }];
 
   const save = async (event) => {
     event.preventDefault();
     setError("");
     setFieldErrors({});
-    if (!id) return;
+    if (!tripId || !trip) return;
     if (Object.values(priorities).reduce((sum, value) => sum + Number(value), 0) !== 100) {
       setError("Las seis prioridades deben sumar 100%.");
       return;
     }
     setSaving(true);
     try {
-      await guardarConfiguracion(id, {
+      await guardarConfiguracion(tripId, {
         presupuestoTotal: Number(budget),
         moneda: "USD",
         transportePreferido: transport,
@@ -508,8 +591,7 @@ export function BudgetPreferences() {
     }
   };
 
-  if (!id) return <WorkspaceLayout title="Presupuesto y preferencias"><Notice>{currentTripOrMessage()}</Notice><Link className="trip-button secondary" to="/my-trips">Ir a Mis viajes</Link></WorkspaceLayout>;
-  if (loading) return <WorkspaceLayout title="Presupuesto y preferencias"><Loading large /></WorkspaceLayout>;
+  if (!tripId) return <WorkspaceLayout title="Presupuesto y preferencias"><Notice>{error || currentTripOrMessage()}</Notice><Link className="trip-button secondary" to="/my-trips">Ir a Mis viajes</Link></WorkspaceLayout>;
 
   return (
     <WorkspaceLayout title="Presupuesto y preferencias" description="Definí cuánto querés gastar y qué hace especial tu manera de viajar.">
@@ -523,21 +605,45 @@ export function BudgetPreferences() {
           </label>
           <label className="trip-field">
             <span>Transporte preferido</span>
-            <select value={transport} onChange={(event) => setTransport(event.target.value)}>
-              <option value="tren">Tren</option>
-              <option value="avion">Avión</option>
-              <option value="auto">Auto</option>
-            </select>
+            <div className="transport-options">
+              {opcionesTransporte.map((option) => (
+                <button
+                  type="button"
+                  key={option.key}
+                  className={`transport-option ${transport === option.key ? "selected" : ""}`}
+                  onClick={() => setTransport(option.key)}
+                >
+                  <span className="transport-icon">{option.icon}</span>
+                  <span>{option.label}</span>
+                </button>
+              ))}
+            </div>
             <FieldError error={{ errors: fieldErrors }} field="transportePreferido" />
           </label>
         </div>
+        {estadoAuto === "cargando" && (
+          <p role="status">Comprobando rutas por carretera…</p>
+        )}
+        {estadoAuto !== "cargando" && estadoAuto !== "disponible" && (
+          <p role="status" className="preference-note">{mensajeAuto}</p>
+        )}
         <div className="trip-section-heading">
           <h2>Tus seis prioridades</h2>
           <p>Al mover un deslizador, el resto se ajusta para mantener el total en 100%.</p>
         </div>
         <PrioritySliders values={priorities} onChange={(key, value) => setPriorities((current) => rebalancePriorities(current, key, value))} />
         <FieldError error={{ errors: fieldErrors }} field="prioridades" />
-        <button className="trip-button primary" type="submit" disabled={saving}>
+        <button
+          className="trip-button primary"
+          type="submit"
+          disabled={
+            loading ||
+            estadoAuto === "cargando" ||
+            !trip ||
+            !budget ||
+            saving
+          }
+        >
           {saving ? "Guardando…" : "Guardar y comparar itinerarios"}
         </button>
       </form>
