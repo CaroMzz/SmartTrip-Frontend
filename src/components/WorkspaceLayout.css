@@ -30,13 +30,11 @@
 }
 
 .workspace-brand-mark {
-  display: grid;
   width: 35px;
   height: 35px;
-  place-items: center;
+  flex: none;
   border-radius: 12px;
-  color: white;
-  background: #317b65;
+  object-fit: cover;
 }
 
 .workspace-nav-label,

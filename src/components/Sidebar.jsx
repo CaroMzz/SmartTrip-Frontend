@@ -7,7 +7,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <span className="sidebar-brand-icon">✦</span>
+        <img className="sidebar-brand-icon" src="/favicon.svg" alt="" aria-hidden="true" />
         <span>SmartTrip</span>
       </div>
 
