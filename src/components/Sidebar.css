@@ -29,7 +29,7 @@
 
 .sidebar-section-title {
   margin: 0 0 12px;
-  color: #71888b;
+  color: #5f6d66;
   font-size: 12px;
   font-weight: 600;
 }
@@ -108,7 +108,7 @@
 
 .sidebar-user span {
   margin-top: 4px;
-  color: #71888b;
+  color: #5f6d66;
   font-size: 12px;
 }
 
@@ -116,7 +116,7 @@
   margin-top: 22px;
   padding: 0;
   border: none;
-  color: #71888b;
+  color: #5f6d66;
   background: transparent;
   font-size: 12px;
   text-align: left;

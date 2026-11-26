@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import L from "leaflet";
-import { MapContainer, Marker, Polyline, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
 import {
   actualizarViaje,
   buscarCiudades,
@@ -25,7 +25,8 @@ import { getCurrentTripId, setCurrentTripId } from "../auth";
 import WorkspaceLayout from "../components/WorkspaceLayout";
 import "leaflet/dist/leaflet.css";
 import "./TravelPages.css";
-import { Notice, PrioritySliders } from "./travelShared";
+import { Notice, PrioritySliders, TransportOptions } from "./travelShared";
+import { useOpciones } from "./tripOptions";
 import {
   defaultPriorities,
   normalizePriorities,
@@ -56,6 +57,22 @@ function dateLabel(date) {
 
 function tripId(trip) {
   return trip?.id || trip?._id || trip?.viajeId;
+}
+
+// Fecha local de hoy en formato AAAA-MM-DD (mínimo del campo de fecha de inicio).
+function todayIso() {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
+
+// Accesos para cambiar el viaje desde cualquier pantalla del viaje (DEF-19, DEF-31).
+function TripActions() {
+  return (
+    <nav className="trip-inline-links trip-actions" aria-label="Acciones del viaje">
+      <Link className="trip-button secondary" to="/edit-trip">Editar viaje</Link>
+      <Link className="trip-button secondary" to="/budget-preferences">Presupuesto y preferencias</Link>
+    </nav>
+  );
 }
 
 export function MyTrips() {
@@ -143,6 +160,7 @@ export function MyTrips() {
               </button>
               <div className="trip-card-actions">
                 <button type="button" onClick={() => openTrip(trip)}>Abrir viaje</button>
+                <button type="button" onClick={() => { setCurrentTripId(String(tripId(trip))); navigate("/edit-trip"); }}>Editar</button>
                 <button type="button" className="danger-link" onClick={() => deleteTrip(trip)}>Eliminar</button>
               </div>
             </article>
@@ -158,8 +176,10 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
   const [startDate, setStartDate] = useState(initialTrip?.fechaInicio?.slice(0, 10) || "");
   const [duration, setDuration] = useState(initialTrip?.duracionDias || "");
   const [travelers, setTravelers] = useState(initialTrip?.cantidadPersonas || 1);
-  const [countries, setCountries] = useState(initialTrip?.paises || []);
+  const [countries, setCountries] = useState(() => initialTrip?.paisesDetalle
+    || (initialTrip?.paises || []).map((country) => (typeof country === "string" ? { nombre: country, codigo: null } : country)));
   const [cities, setCities] = useState(initialTrip?.ciudadesObligatorias || []);
+  const codesLookedUp = useRef(false);
   const [countryQuery, setCountryQuery] = useState("");
   const [cityQuery, setCityQuery] = useState("");
   const [countryOptions, setCountryOptions] = useState([]);
@@ -169,6 +189,20 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
   const [lookupError, setLookupError] = useState("");
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Con un backend que todavía devuelve los países como texto, busca su código en el catálogo (DEF-18).
+  useEffect(() => {
+    const missing = countries.filter((country) => !country.codigo);
+    if (codesLookedUp.current || !missing.length) return;
+    codesLookedUp.current = true;
+    Promise.all(missing.map((country) => buscarPaises(country.nombre)
+      .then((response) => (response.resultados || []).find((option) => option.nombre.toLowerCase() === country.nombre.toLowerCase()))
+      .catch(() => null)))
+      .then((found) => {
+        setCountries((current) => current.map((country) => country.codigo ? country
+          : found.find((option) => option?.nombre.toLowerCase() === country.nombre.toLowerCase()) || country));
+      });
+  }, [countries]);
 
   useEffect(() => {
     if (countryQuery.trim().length < 2) return undefined;
@@ -247,8 +281,8 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
       setError({ message: "Elegí al menos un país del autocompletado." });
       return;
     }
-    if (cities.length < 2) {
-      setError({ message: "Elegí al menos dos ciudades del autocompletado." });
+    if (cities.length < 1) {
+      setError({ message: "Elegí al menos una ciudad del buscador." });
       return;
     }
     if (Number(duration) < cities.length) {
@@ -276,7 +310,7 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
     <form className="trip-form" onSubmit={handleSubmit}>
       <label className="trip-field">
         <span>Nombre del viaje</span>
-        <input maxLength="120" value={name} onChange={(event) => setName(event.target.value)} required />
+        <input maxLength="150" value={name} onChange={(event) => setName(event.target.value)} required />
         <FieldError error={error} field="nombre" />
       </label>
       <label className="trip-field">
@@ -314,7 +348,7 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
         <FieldError error={error} field="paises" />
       </label>
       <label className="trip-field">
-        <span>Ciudades obligatorias <small>Elegí entre 2 y 20 del catálogo</small></span>
+        <span>Ciudades obligatorias <small>Elegí entre 1 y 20 del buscador</small></span>
         <input
           value={cityQuery}
           onChange={(event) => {
@@ -334,7 +368,7 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
           <div className="autocomplete-options" role="listbox">
             {cityOptions.map((city) => (
               <button type="button" role="option" key={city.idExterno} onClick={() => addCity(city)}>
-                {city.nombre}, {city.pais}
+                {city.nombre}{city.region ? `, ${city.region}` : ""}, {city.pais}
               </button>
             ))}
           </div>
@@ -352,7 +386,13 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
       <div className="trip-form-columns">
         <label className="trip-field">
           <span>Fecha de inicio</span>
-          <input type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} required />
+          <input
+            type="date"
+            min={initialTrip?.fechaInicio && initialTrip.fechaInicio.slice(0, 10) < todayIso() ? initialTrip.fechaInicio.slice(0, 10) : todayIso()}
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+            required
+          />
           <FieldError error={error} field="fechaInicio" />
         </label>
         <label className="trip-field">
@@ -394,7 +434,7 @@ export function NewTrip() {
       <section className="trip-panel">
         <div className="trip-panel-heading">
           <span className="trip-step">01</span>
-          <div><h2>Datos del viaje</h2><p>Los destinos se seleccionan del catálogo para armar tu ruta.</p></div>
+          <div><h2>Datos del viaje</h2><p>Buscá tus destinos en el catálogo de SmartTrip o en OpenStreetMap.</p></div>
         </div>
         <TripDetailsForm onSubmit={handleCreate} submitLabel="Continuar con presupuesto" />
       </section>
@@ -421,7 +461,7 @@ export function EditTrip() {
   const saveChanges = async (payload) => {
     const previous = {
       nombre: trip.nombre,
-      paises: trip.paises,
+      paises: trip.paisesDetalle || trip.paises,
       ciudadesObligatorias: trip.ciudadesObligatorias,
       fechaInicio: trip.fechaInicio?.slice(0, 10),
       duracionDias: trip.duracionDias,
@@ -445,7 +485,7 @@ export function EditTrip() {
   if (error) return <WorkspaceLayout title="Editar viaje"><Notice>{error}</Notice></WorkspaceLayout>;
 
   return (
-    <WorkspaceLayout title="Editar viaje" description="Actualizá los datos de tu viaje. Al guardar se volverá a generar el itinerario.">
+    <WorkspaceLayout title="Editar viaje" description="Actualizá los datos de tu viaje. Al guardar podés volver a generar las alternativas.">
       <section className="trip-panel">
         <Notice type="info">Guardar cambios reinicia el estado del viaje y elimina las alternativas anteriores.</Notice>
         <TripDetailsForm key={id} initialTrip={trip} onSubmit={saveChanges} submitLabel="Guardar cambios" />
@@ -453,6 +493,7 @@ export function EditTrip() {
           <div className="trip-success-actions">
             <Notice type="success">Cambios guardados. Podés generar nuevas alternativas cuando quieras.</Notice>
             <button className="trip-button primary" type="button" onClick={() => navigate("/compare-itineraries")}>Volver a generar itinerarios</button>
+            <Link className="trip-button secondary" to="/budget-preferences">Presupuesto y preferencias</Link>
             <Link className="trip-button secondary" to="/my-trips">Volver a Mis viajes</Link>
           </div>
         )}
@@ -475,6 +516,7 @@ export function BudgetPreferences() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
+  // Un viaje ya configurado muestra su presupuesto, transporte y prioridades; uno nuevo parte del perfil.
   useEffect(() => {
     if (!tripId) {
       setError("No hay un viaje en curso. Creá uno para continuar.");
@@ -631,7 +673,7 @@ export function BudgetPreferences() {
           <h2>Tus seis prioridades</h2>
           <p>Al mover un deslizador, el resto se ajusta para mantener el total en 100%.</p>
         </div>
-        <PrioritySliders values={priorities} onChange={(key, value) => setPriorities((current) => rebalancePriorities(current, key, value))} />
+        <PrioritySliders criterios={criterios} values={priorities} onChange={(key, value) => setPriorities((current) => rebalancePriorities(current, key, value))} />
         <FieldError error={{ errors: fieldErrors }} field="prioridades" />
         <button
           className="trip-button primary"
@@ -653,6 +695,13 @@ export function BudgetPreferences() {
 
 function getItineraries(response) {
   return response.itinerarios || response.alternativas || [];
+}
+
+// Aclaraciones del backend sobre el recorrido, por ejemplo que sin OpenRouteService la distancia une las
+// ciudades en línea aproximada (DEF-34).
+function RouteNotes({ notes }) {
+  if (!notes?.length) return null;
+  return <ul className="route-notes" aria-label="Aclaraciones del recorrido">{notes.map((note) => <li key={note}>{note}</li>)}</ul>;
 }
 
 export function CompareItineraries() {
@@ -710,6 +759,8 @@ export function CompareItineraries() {
   return (
     <WorkspaceLayout title="Comparar itinerarios" description="Elegí la alternativa que mejor se adapta a tus prioridades.">
       <Notice>{error}</Notice>
+      <TripActions />
+      <RouteNotes notes={[...new Set(itineraries.flatMap((option) => option.notas || []))]} />
       {!itineraries.length ? <div className="trip-empty"><h2>No se generaron alternativas</h2><button className="trip-button primary" onClick={() => window.location.reload()} type="button">Intentar nuevamente</button></div> : (
         <div className="comparison-scroll">
           <table className="comparison-table">
@@ -745,19 +796,20 @@ export function CompareItineraries() {
   );
 }
 
-function CityDetail({ idExterno, onClose }) {
+function CityDetail({ city, onClose }) {
+  const idExterno = city.idExterno;
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let active = true;
-    obtenerDestino(idExterno)
+    obtenerDestino(idExterno, { nombre: city.nombre, pais: city.pais })
       .then((response) => { if (active) setDestination(response.destino || response); })
       .catch((requestError) => { if (active) setError(requestError.message); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [idExterno]);
+  }, [idExterno, city.nombre, city.pais]);
 
   const interests = destination?.puntosInteres || {};
   const categories = [
@@ -812,13 +864,25 @@ function CityDetail({ idExterno, onClose }) {
   );
 }
 
+// Encuadra el mapa para que se vean todas las ciudades del recorrido (DEF-32).
+function FitToCities({ locations }) {
+  const map = useMap();
+  const key = JSON.stringify(locations);
+  useEffect(() => {
+    const points = JSON.parse(key);
+    if (points.length > 1) map.fitBounds(points, { padding: [36, 36] });
+    else if (points.length === 1) map.setView(points[0], 9);
+  }, [map, key]);
+  return null;
+}
+
 export function Itinerary() {
   const id = getCurrentTripId();
   const [itinerary, setItinerary] = useState(null);
   const [geometry, setGeometry] = useState(null);
   const [loading, setLoading] = useState(Boolean(id));
   const [error, setError] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -869,12 +933,23 @@ export function Itinerary() {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+                <FitToCities locations={locations} />
                 {routeLines.map((line, index) => <Polyline key={`line-${index}`} positions={line} pathOptions={{ color: "#317b65", weight: 4 }} />)}
                 {cities.map((city, index) => {
                   if (!Number.isFinite(Number(city.latitud)) || !Number.isFinite(Number(city.longitud))) return null;
                   return (
-                    <Marker key={city.idExterno || city.nombre || index} position={[Number(city.latitud), Number(city.longitud)]} icon={cityIcon} eventHandlers={{ click: () => city.idExterno && setSelectedCity(city.idExterno) }}>
-                      <Popup><button className="map-popup-button" type="button" onClick={() => city.idExterno && setSelectedCity(city.idExterno)}>{city.nombre} · Ver ficha</button></Popup>
+                    <Marker
+                      key={city.idExterno || city.nombre || index}
+                      position={[Number(city.latitud), Number(city.longitud)]}
+                      icon={cityIcon}
+                      title={city.nombre}
+                      eventHandlers={{
+                        // Leaflet crea el marcador como botón sin nombre accesible (axe: aria-command-name).
+                        add: (event) => event.target.getElement()?.setAttribute("aria-label", `${city.nombre}: ver ficha`),
+                        click: () => city.idExterno && setSelectedCity(city),
+                      }}
+                    >
+                      <Popup><button className="map-popup-button" type="button" onClick={() => city.idExterno && setSelectedCity(city)}>{city.nombre} · Ver ficha</button></Popup>
                     </Marker>
                   );
                 })}
@@ -887,7 +962,7 @@ export function Itinerary() {
             <div className="trip-section-heading"><h2>Ciudades</h2><p>Seleccioná una ciudad para abrir su ficha.</p></div>
             <div className="itinerary-cities">
               {cities.map((city, index) => (
-                <button key={city.idExterno || city.nombre || index} type="button" onClick={() => city.idExterno && setSelectedCity(city.idExterno)}>
+                <button key={city.idExterno || city.nombre || index} type="button" onClick={() => city.idExterno && setSelectedCity(city)}>
                   <span>{String(index + 1).padStart(2, "0")}</span><strong>{city.nombre}</strong><small>{city.pais}</small>
                 </button>
               ))}
@@ -896,6 +971,7 @@ export function Itinerary() {
 
           <section className="trip-panel">
             <div className="trip-section-heading"><h2>Tramos del viaje</h2><p>En el orden de tu itinerario. Las excursiones son de ida y vuelta.</p></div>
+            <RouteNotes notes={itinerary.notas} />
             <div className="itinerary-legs">
               {(itinerary.tramos || []).map((leg, index) => (
                 <article key={leg.id || `${leg.origen}-${leg.destino}-${index}`}>
@@ -911,9 +987,10 @@ export function Itinerary() {
             <Link className="trip-button secondary" to="/trip-calendar">Ver calendario</Link>
             <Link className="trip-button secondary" to="/trip-budget">Ver presupuesto</Link>
           </div>
+          <TripActions />
         </>
       )}
-      {selectedCity && <CityDetail idExterno={selectedCity} onClose={() => setSelectedCity("")} />}
+      {selectedCity && <CityDetail city={selectedCity} onClose={() => setSelectedCity(null)} />}
     </WorkspaceLayout>
   );
 }
@@ -943,6 +1020,7 @@ export function TripCalendar() {
   return (
     <WorkspaceLayout title="Calendario del viaje" description="Un día a la vez: estadías, traslados y excursiones.">
       <Notice>{error}</Notice>
+      <TripActions />
       {calendar.length === 0 ? <div className="trip-empty"><h2>El calendario todavía no está disponible</h2><Link className="trip-button secondary" to="/compare-itineraries">Comparar itinerarios</Link></div> : (
         <div className="calendar-list">
           {calendar.map((day, index) => (
@@ -988,6 +1066,7 @@ export function TripBudget() {
   return (
     <WorkspaceLayout title="Presupuesto del viaje" description="Una estimación para planificar con más claridad. Los precios no son tarifas reales.">
       <Notice>{error}</Notice>
+      <TripActions />
       {budget && (
         <>
           <Notice type="info">Estimaciones en USD. No representan precios reales.{budget.esEstimacion === false ? "" : " El total es estimado."}</Notice>
