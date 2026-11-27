@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { setCurrentTripId } from "../auth";
@@ -7,7 +7,6 @@ const apiMocks = vi.hoisted(() => ({
   obtenerMiPerfil: vi.fn(),
   obtenerViaje: vi.fn(),
   guardarConfiguracion: vi.fn(),
-  verificarAutoDisponible: vi.fn(),
 }));
 
 vi.mock("../api", async (importOriginal) => {
@@ -33,22 +32,46 @@ describe("BudgetPreferences", () => {
         },
       },
     });
-    apiMocks.verificarAutoDisponible.mockRejectedValue(
-      new Error("No se pudo comprobar la ruta")
-    );
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("disables saving while loading and shows only airplane when Auto is unverified", async () => {
-    let resolveTrip;
-    apiMocks.obtenerViaje.mockReturnValue(
-      new Promise((resolve) => {
-        resolveTrip = resolve;
-      })
+  it("shows only available transports and picks the first one when train is unavailable", async () => {
+    apiMocks.obtenerViaje.mockResolvedValue({
+      viaje: {
+        id: "trip-1",
+        presupuestoTotal: 3000,
+        transportePreferido: "tren",
+        transportesDisponibles: ["avion"],
+        avisoTransporte: "Solo se puede llegar en avión.",
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <BudgetPreferences />
+      </MemoryRouter>
     );
+
+    const airplane = await screen.findByRole("button", { name: /avión/i });
+    expect(airplane).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Solo se puede llegar en avión.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /tren/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /auto/i })).not.toBeInTheDocument();
+  });
+
+  it("asks the user to select a transport again when the saved preference is null", async () => {
+    apiMocks.obtenerViaje.mockResolvedValue({
+      viaje: {
+        id: "trip-1",
+        presupuestoTotal: 3000,
+        transportePreferido: null,
+        transportesDisponibles: ["avion", "auto"],
+        avisoTransporte: null,
+      },
+    });
 
     render(
       <MemoryRouter>
@@ -57,28 +80,48 @@ describe("BudgetPreferences", () => {
     );
 
     expect(
-      screen.getByText("Comprobando rutas por carretera…")
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /guardar y comparar itinerarios/i })
-    ).toBeDisabled();
-
-    await act(async () => {
-      resolveTrip({
-        viaje: {
-          id: "trip-1",
-          presupuestoTotal: 3000,
-        },
-      });
-    });
-
-    expect(
       await screen.findByText(
-        "No pudimos comprobar la ruta. Por ahora, elegí avión."
+        "El transporte anterior ya no está disponible. Elegí uno nuevo para continuar."
       )
     ).toBeInTheDocument();
-    expect(apiMocks.verificarAutoDisponible).toHaveBeenCalledWith("trip-1");
-    expect(screen.getByRole("button", { name: /avión/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /auto/i })).not.toBeInTheDocument();
+
+    const saveButton = screen.getByRole("button", {
+      name: /guardar y comparar itinerarios/i,
+    });
+    expect(saveButton).toBeDisabled();
+
+    fireEvent.click(screen.getByText("Auto").closest("button"));
+    expect(saveButton).toBeEnabled();
+  });
+
+  it("shows the backend reason when saving an unavailable transport fails", async () => {
+    apiMocks.obtenerViaje.mockResolvedValue({
+      viaje: {
+        id: "trip-1",
+        presupuestoTotal: 3000,
+        transportePreferido: "tren",
+        transportesDisponibles: ["tren", "avion"],
+        avisoTransporte: null,
+      },
+    });
+    apiMocks.guardarConfiguracion.mockRejectedValue(
+      new Error("El tren no está disponible para este viaje.")
+    );
+
+    render(
+      <MemoryRouter>
+        <BudgetPreferences />
+      </MemoryRouter>
+    );
+
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: /guardar y comparar itinerarios/i,
+      })
+    );
+
+    expect(
+      await screen.findByRole("alert")
+    ).toHaveTextContent("El tren no está disponible para este viaje.");
   });
 });
