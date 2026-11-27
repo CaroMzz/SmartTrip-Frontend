@@ -9,6 +9,9 @@ function Registration() {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,8 +24,12 @@ function Registration() {
     const contraseña = formData.get("password");
     const confirmPassword = formData.get("confirmPassword");
 
-    if (!nombre) {
-      setError("Ingresá tu nombre completo.");
+    if (!nombre || !email || !contraseña || !confirmPassword) {
+      setError("Completá todos los campos para crear tu cuenta.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Revisá el formato de tu correo electrónico.");
       return;
     }
     if (contraseña !== confirmPassword) {
@@ -62,7 +69,7 @@ function Registration() {
           <p className="form-description">
             Creá tu cuenta y comenzá a planificar tu próxima aventura.
           </p>
-          <form className="registration-form" onSubmit={handleSubmit}>
+          <form className="registration-form" noValidate onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="fullName">Nombre completo</label>
               <input
@@ -71,7 +78,6 @@ function Registration() {
                 name="fullName"
                 placeholder="Florencia Lopez"
                 autoComplete="name"
-                minLength={2}
                 required
               />
               {fieldErrors.nombre && <small className="registration-error">{fieldErrors.nombre}</small>}
@@ -84,8 +90,11 @@ function Registration() {
                 name="email"
                 placeholder="florencia@ejemplo.com"
                 autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 required
               />
+              {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && <small className="registration-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
               {fieldErrors.email && <small className="registration-error">{fieldErrors.email}</small>}
             </div>
             <div className="form-group">
@@ -96,9 +105,11 @@ function Registration() {
                 name="password"
                 placeholder="Crea una contraseña"
                 autoComplete="new-password"
-                minLength={15}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 required
               />
+              {password.length > 0 && password.length < 15 && <small className="registration-field-notice">La contraseña necesita al menos 15 caracteres ({password.length}/15).</small>}
               {fieldErrors.contraseña && <small className="registration-error">{fieldErrors.contraseña}</small>}
             </div>
             <div className="form-group">
@@ -109,9 +120,11 @@ function Registration() {
                 name="confirmPassword"
                 placeholder="Confirma tu contraseña"
                 autoComplete="new-password"
-                minLength={15}
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
                 required
               />
+              {confirmPassword && password !== confirmPassword && <small className="registration-field-notice">Las contraseñas no coinciden.</small>}
             </div>
             {error && <p className="registration-error" role="alert">{error}</p>}
             <button type="submit" className="submit-button" disabled={isSubmitting}>

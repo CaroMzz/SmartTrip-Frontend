@@ -9,18 +9,29 @@ function Login() {
   const location = useLocation();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setIsSubmitting(true);
-
     const formData = new FormData(e.currentTarget);
+    const submittedEmail = formData.get("email").trim();
+    const submittedPassword = formData.get("password");
+    if (!submittedEmail || !submittedPassword) {
+      setError("Completá tu correo y contraseña para iniciar sesión.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submittedEmail)) {
+      setError("Revisá el formato de tu correo electrónico.");
+      return;
+    }
+    setIsSubmitting(true);
 
     try {
       await iniciarSesion(
-        formData.get("email").trim(),
-        formData.get("password")
+        submittedEmail,
+        submittedPassword
       );
       navigate("/my-trips");
     } catch (loginError) {
@@ -50,7 +61,7 @@ function Login() {
             <p className="login-notice" role="status">{location.state.notice}</p>
           )}
 
-          <form className="login-form" onSubmit={handleSubmit}>
+          <form className="login-form" noValidate onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Correo electrónico</label>
 
@@ -60,8 +71,11 @@ function Login() {
                 name="email"
                 placeholder="florencia@ejemplo.com"
                 autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 required
               />
+              {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && <small className="login-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
             </div>
 
             <div className="form-group">
@@ -73,6 +87,8 @@ function Login() {
                 name="password"
                 placeholder="Ingresa tu contraseña"
                 autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 required
               />
             </div>

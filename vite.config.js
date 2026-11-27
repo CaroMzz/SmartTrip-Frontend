@@ -30,6 +30,8 @@ export default defineConfig(({ command, mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
+      // Las pruebas no deben depender de un .env local: si no hay VITE_API_URL se usa una URL ficticia.
+      env: { VITE_API_URL: process.env.VITE_API_URL || 'http://localhost:3000' },
       setupFiles: './src/test/setup.js',
     },
   }
