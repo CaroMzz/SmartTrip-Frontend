@@ -4,7 +4,6 @@ import {
   iniciarSesion,
   obtenerMiPerfil,
   registrar,
-  verificarAutoDisponible,
 } from "../api";
 
 describe("API Client Module (src/api.js)", () => {
@@ -102,21 +101,6 @@ describe("API Client Module (src/api.js)", () => {
       })
     );
     expect(res.usuario.email).toBe("ana@test.com");
-  });
-
-  it("verificarAutoDisponible consulta el endpoint del viaje", async () => {
-    globalThis.fetch.mockResolvedValueOnce({
-      ok: true,
-      text: async () => JSON.stringify({ estado: "disponible", mensaje: "" }),
-    });
-
-    const res = await verificarAutoDisponible("trip/1");
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/viajes/trip%2F1/auto-disponible"),
-      expect.objectContaining({ method: undefined })
-    );
-    expect(res.estado).toBe("disponible");
   });
 
   it("lanza un error descriptivo si el servidor responde con status no ok", async () => {
