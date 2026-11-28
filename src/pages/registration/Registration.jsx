@@ -4,6 +4,9 @@ import { registrar } from "../../api";
 import TravelHero from "../../components/TravelHero";
 import "./Registration.css";
 
+// Cada parte del dominio excluye el punto: sin backtracking cuadrático (Sonar S8786).
+const CORREO_VALIDO = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
+
 function Registration() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -28,7 +31,7 @@ function Registration() {
       setError("Completá todos los campos para crear tu cuenta.");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!CORREO_VALIDO.test(email)) {
       setError("Revisá el formato de tu correo electrónico.");
       return;
     }
@@ -94,7 +97,7 @@ function Registration() {
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
-              {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && <small className="registration-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
+              {email && !CORREO_VALIDO.test(email) && <small className="registration-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
               {fieldErrors.email && <small className="registration-error">{fieldErrors.email}</small>}
             </div>
             <div className="form-group">

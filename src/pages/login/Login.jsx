@@ -4,6 +4,9 @@ import { iniciarSesion } from "../../api";
 import TravelHero from "../../components/TravelHero";
 import "./Login.css";
 
+// Cada parte del dominio excluye el punto: sin backtracking cuadrático (Sonar S8786).
+const CORREO_VALIDO = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
+
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +25,7 @@ function Login() {
       setError("Completá tu correo y contraseña para iniciar sesión.");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submittedEmail)) {
+    if (!CORREO_VALIDO.test(submittedEmail)) {
       setError("Revisá el formato de tu correo electrónico.");
       return;
     }
@@ -75,7 +78,7 @@ function Login() {
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
-              {email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && <small className="login-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
+              {email && !CORREO_VALIDO.test(email) && <small className="login-field-notice">Ingresá un correo válido, por ejemplo nombre@correo.com.</small>}
             </div>
 
             <div className="form-group">
