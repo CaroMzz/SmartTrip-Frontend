@@ -99,4 +99,26 @@ describe("Login Component", () => {
     );
     expect(mockNavigate).not.toHaveBeenCalled();
   });
+
+  it("rechaza un correo con el dominio malformado sin llamar a la API", () => {
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
+      target: { value: "ana@example..com" },
+    });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), {
+      target: { value: "clave-correcta" },
+    });
+    expect(screen.getByText(/ingresá un correo válido/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /iniciar sesión/i }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Revisá el formato de tu correo electrónico."
+    );
+    expect(mockIniciarSesion).not.toHaveBeenCalled();
+  });
 });
