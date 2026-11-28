@@ -503,7 +503,8 @@ export function EditTrip() {
 export function BudgetPreferences() {
   const navigate = useNavigate();
   const tripId = getCurrentTripId();
-  const { transportes, criterios } = useOpciones();
+  const { criterios } = useOpciones();
+  const { transportes } = useOpciones();
   const [trip, setTrip] = useState(null);
   const [budget, setBudget] = useState("");
   const [transport, setTransport] = useState("");
