@@ -24,7 +24,7 @@ import { getCurrentTripId, setCurrentTripId } from "../auth";
 import WorkspaceLayout from "../components/WorkspaceLayout";
 import "leaflet/dist/leaflet.css";
 import "./TravelPages.css";
-import { Notice, PrioritySliders, TransportOptions } from "./travelShared";
+import { Notice, PrioritySliders } from "./travelShared";
 import { useOpciones } from "./tripOptions";
 import {
   defaultPriorities,
@@ -503,10 +503,11 @@ export function EditTrip() {
 export function BudgetPreferences() {
   const navigate = useNavigate();
   const tripId = getCurrentTripId();
+  const { transportes, criterios } = useOpciones();
   const [trip, setTrip] = useState(null);
   const [budget, setBudget] = useState("");
   const [transport, setTransport] = useState("");
-  const [availableTransports, setAvailableTransports] = useState([]);
+  const [availableTransports, setAvailableTransports] = useState(null);
   const [priorities, setPriorities] = useState(defaultPriorities);
   const [loading, setLoading] = useState(Boolean(tripId));
   const [saving, setSaving] = useState(false);
@@ -536,16 +537,16 @@ export function BudgetPreferences() {
         setBudget(String(viaje.presupuestoTotal ?? ""));
         const transports = Array.isArray(viaje.transportesDisponibles)
           ? viaje.transportesDisponibles
-          : [];
+          : null;
         setAvailableTransports(transports);
         setTransport(
           viaje.transportePreferido === null
             ? ""
-            : transports.includes(viaje.transportePreferido)
+            : transports?.includes(viaje.transportePreferido)
               ? viaje.transportePreferido
-              : transports.includes("tren")
+              : transports?.includes("tren")
                 ? "tren"
-                : transports[0] || ""
+                : transports?.[0] || viaje.transportePreferido || ""
         );
       }
 
@@ -577,9 +578,14 @@ export function BudgetPreferences() {
     avion: { label: "Avión", icon: "✈️" },
     auto: { label: "Auto", icon: "🚗" },
   };
-  const transportOptions = availableTransports.map((key) => ({
+  const effectiveAvailableTransports = availableTransports === null
+    ? transportes.map(({ tipo }) => tipo)
+    : availableTransports;
+  const transportOptions = effectiveAvailableTransports.map((key) => ({
     key,
-    ...(transportDetails[key] || { label: key, icon: "" }),
+    ...(transportes.find(({ tipo }) => tipo === key)
+      ? { label: transportes.find(({ tipo }) => tipo === key).etiqueta, icon: transportDetails[key]?.icon || "" }
+      : transportDetails[key] || { label: key, icon: "" }),
   }));
 
   const save = async (event) => {
@@ -587,7 +593,7 @@ export function BudgetPreferences() {
     setError("");
     setFieldErrors({});
     if (!tripId || !trip) return;
-    if (!transport || !availableTransports.includes(transport)) {
+    if (!transport || !effectiveAvailableTransports.includes(transport)) {
       setError("Elegí un transporte disponible para continuar.");
       return;
     }
@@ -632,21 +638,19 @@ export function BudgetPreferences() {
             {trip?.transportePreferido === null && !transport && (
               <Notice type="info">El transporte anterior ya no está disponible. Elegí uno nuevo para continuar.</Notice>
             )}
-            <div className="transport-options">
+            <select
+              className="trip-native-select"
+              value={transport}
+              onChange={(event) => setTransport(event.target.value)}
+            >
+              <option value="">Elegí un transporte</option>
               {transportOptions.map((option) => (
-                <button
-                  type="button"
-                  key={option.key}
-                  className={`transport-option ${transport === option.key ? "selected" : ""}`}
-                  onClick={() => setTransport(option.key)}
-                  aria-pressed={transport === option.key}
-                >
-                  <span className="transport-icon">{option.icon}</span>
-                  <span>{option.label}</span>
-                </button>
+                <option key={option.key} value={option.key}>
+                  {option.label}
+                </option>
               ))}
-            </div>
-            {trip && availableTransports.length === 0 && (
+            </select>
+            {trip && Array.isArray(availableTransports) && availableTransports.length === 0 && (
               <Notice type="info">Este viaje no tiene transportes disponibles.</Notice>
             )}
             <FieldError error={{ errors: fieldErrors }} field="transportePreferido" />

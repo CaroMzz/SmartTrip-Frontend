@@ -55,11 +55,11 @@ describe("BudgetPreferences", () => {
       </MemoryRouter>
     );
 
-    const airplane = await screen.findByRole("button", { name: /avión/i });
-    expect(airplane).toHaveAttribute("aria-pressed", "true");
+    const transportSelect = await screen.findByLabelText("Transporte preferido");
+    expect(transportSelect).toHaveValue("avion");
     expect(screen.getByText("Solo se puede llegar en avión.")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /tren/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /auto/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: /tren/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: /auto/i })).not.toBeInTheDocument();
   });
 
   it("asks the user to select a transport again when the saved preference is null", async () => {
@@ -90,7 +90,9 @@ describe("BudgetPreferences", () => {
     });
     expect(saveButton).toBeDisabled();
 
-    fireEvent.click(screen.getByText("Auto").closest("button"));
+    fireEvent.change(await screen.findByRole("combobox"), {
+      target: { value: "auto" },
+    });
     expect(saveButton).toBeEnabled();
   });
 
