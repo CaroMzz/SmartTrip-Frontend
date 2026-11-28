@@ -122,6 +122,36 @@ describe("api: solicitudes y manejo de errores", () => {
   });
 });
 
+describe("api: identificador de viaje", () => {
+  const originalFetch = globalThis.fetch;
+
+  beforeEach(() => {
+    globalThis.fetch = vi.fn().mockResolvedValue(respuesta({}));
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it("acepta el id guardado como texto (sessionStorage) y lo usa como número", async () => {
+    await api.obtenerCalendario(" 7 ");
+
+    expect(globalThis.fetch.mock.calls[0][0]).toBe(`${BASE}/viajes/7/calendario`);
+  });
+
+  it.each(["..", ".", "7/../../usuarios/me", "abc", "", "0", "-3", "1.5", "9007199254740993", null, undefined])(
+    "rechaza el id %j sin llamar al servidor",
+    async (id) => {
+      await expect(api.obtenerViaje(id)).rejects.toMatchObject({
+        name: "ApiError",
+        status: 400,
+        message: "El identificador del viaje no es válido.",
+      });
+      expect(globalThis.fetch).not.toHaveBeenCalled();
+    }
+  );
+});
+
 describe("api: rutas de cada endpoint", () => {
   const originalFetch = globalThis.fetch;
 
@@ -142,7 +172,7 @@ describe("api: rutas de cada endpoint", () => {
     ["buscarPaises", () => api.buscarPaises("Españ a"), "/destinos/paises?q=Espa%C3%B1%20a", undefined, undefined],
     ["buscarCiudades", () => api.buscarCiudades("San José", ["CR", "US"]), "/destinos/buscar?q=San%20Jos%C3%A9&paises=CR%2CUS", undefined, undefined],
     ["obtenerViajes", () => api.obtenerViajes(), "/viajes", undefined, undefined],
-    ["obtenerViaje", () => api.obtenerViaje("a/b"), "/viajes/a%2Fb", undefined, undefined],
+    ["obtenerViaje", () => api.obtenerViaje(42), "/viajes/42", undefined, undefined],
     ["crearViaje", () => api.crearViaje({ nombre: "Viaje" }), "/viajes", "POST", { nombre: "Viaje" }],
     ["actualizarViaje", () => api.actualizarViaje("7", { nombre: "Otro" }), "/viajes/7", "PATCH", { nombre: "Otro" }],
     ["eliminarViaje", () => api.eliminarViaje("7"), "/viajes/7", "DELETE", undefined],
