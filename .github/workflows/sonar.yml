@@ -1,0 +1,31 @@
+# Corre las pruebas con coverage y manda el resultado a SonarCloud.
+# Requiere el secret SONAR_TOKEN (SonarCloud → My Account → Security) en el repositorio.
+# Solo corre en FedericoKnopf/SmartTrip-Frontend, que es donde está el proyecto de SonarCloud;
+# en el repo original (CaroMzz) el job queda "Skipped" y no bloquea los merges.
+# No hace falta VITE_API_URL: las pruebas usan una URL ficticia y acá no se compila la app.
+name: SonarCloud
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+jobs:
+  sonar:
+    if: github.repository == 'FedericoKnopf/SmartTrip-Frontend'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Sonar necesita el historial para asignar los issues nuevos
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:coverage
+      - uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
