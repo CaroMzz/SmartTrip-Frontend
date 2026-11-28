@@ -121,42 +121,44 @@ export const buscarCiudades = (consulta, codigosPaises) =>
     `/destinos/buscar?q=${encodeURIComponent(consulta)}&paises=${encodeURIComponent(codigosPaises.join(","))}`
   );
 
+// Los viajes tienen id numérico (el backend rechaza cualquier otro con 400). Pasarlo a número antes de armar la
+// ruta evita que un valor manipulado en el almacenamiento del navegador (por ejemplo "..") desvíe la petición,
+// con el token de la sesión, hacia otro endpoint de la API (Sonar S8476).
+function rutaViaje(id, sufijo = "") {
+  const numero = Number(id);
+  if (!Number.isSafeInteger(numero) || numero < 1) {
+    throw new ApiError("El identificador del viaje no es válido.", 400);
+  }
+  return `/viajes/${numero}${sufijo}`;
+}
+
 export const obtenerViajes = () => solicitar("/viajes");
 
-export const obtenerViaje = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}`);
+export const obtenerViaje = async (id) => solicitar(rutaViaje(id));
 
 export const crearViaje = (datos) =>
   solicitar("/viajes", enviar("POST", datos));
 
-export const actualizarViaje = (id, datos) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}`, enviar("PATCH", datos));
+export const actualizarViaje = async (id, datos) =>
+  solicitar(rutaViaje(id), enviar("PATCH", datos));
 
-export const eliminarViaje = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}`, { method: "DELETE" });
+export const eliminarViaje = async (id) =>
+  solicitar(rutaViaje(id), { method: "DELETE" });
 
-export const guardarConfiguracion = (id, datos) =>
-  solicitar(
-    `/viajes/${encodeURIComponent(id)}/configuracion`,
-    enviar("PATCH", datos)
-  );
+export const guardarConfiguracion = async (id, datos) =>
+  solicitar(rutaViaje(id, "/configuracion"), enviar("PATCH", datos));
 
-export const obtenerItinerarios = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}/itinerarios`);
+export const obtenerItinerarios = async (id) =>
+  solicitar(rutaViaje(id, "/itinerarios"));
 
-export const generarItinerarios = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}/itinerarios/generar`, {
-    method: "POST",
-  });
+export const generarItinerarios = async (id) =>
+  solicitar(rutaViaje(id, "/itinerarios/generar"), { method: "POST" });
 
-export const seleccionarItinerario = (id, itinerarioId) =>
-  solicitar(
-    `/viajes/${encodeURIComponent(id)}/itinerario-seleccionado`,
-    enviar("PUT", { itinerarioId })
-  );
+export const seleccionarItinerario = async (id, itinerarioId) =>
+  solicitar(rutaViaje(id, "/itinerario-seleccionado"), enviar("PUT", { itinerarioId }));
 
-export const obtenerItinerario = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}/itinerario`);
+export const obtenerItinerario = async (id) =>
+  solicitar(rutaViaje(id, "/itinerario"));
 
 // Para destinos de OpenStreetMap el backend necesita el nombre y el país para ubicar el lugar.
 export const obtenerDestino = (idExterno, { nombre, pais } = {}) => {
@@ -169,8 +171,8 @@ export const obtenerDestino = (idExterno, { nombre, pais } = {}) => {
 
 export const obtenerOpciones = () => solicitar("/opciones");
 
-export const obtenerCalendario = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}/calendario`);
+export const obtenerCalendario = async (id) =>
+  solicitar(rutaViaje(id, "/calendario"));
 
-export const obtenerPresupuesto = (id) =>
-  solicitar(`/viajes/${encodeURIComponent(id)}/presupuesto`);
+export const obtenerPresupuesto = async (id) =>
+  solicitar(rutaViaje(id, "/presupuesto"));
