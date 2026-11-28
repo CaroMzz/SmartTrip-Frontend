@@ -110,10 +110,11 @@ describe("Itinerary", () => {
     expect(mapaRenderizado).toHaveAttribute("data-center", JSON.stringify([48.85, 2.35]));
     expect(screen.getAllByTestId("linea")).toHaveLength(1);
     expect(screen.getByTestId("linea")).toHaveAttribute("data-positions", JSON.stringify([[48.85, 2.35], [45.76, 4.83]]));
-    expect(mapa.fitBounds).toHaveBeenCalledWith([[48.85, 2.35], [45.76, 4.83], [1, 1]], { padding: [36, 36] });
+    // El encuadre y el nombre de los marcadores se aplican en efectos, que en CI pueden correr después del render.
+    await waitFor(() => expect(mapa.fitBounds).toHaveBeenCalledWith([[48.85, 2.35], [45.76, 4.83], [1, 1]], { padding: [36, 36] }));
     expect(screen.getAllByRole("button", { name: /^Marcador / })).toHaveLength(3);
     expect(screen.queryByRole("button", { name: "Marcador Sin coordenadas" })).not.toBeInTheDocument();
-    expect(document.querySelector('[data-marcador="París"]')).toHaveAttribute("aria-label", "París: ver ficha");
+    await waitFor(() => expect(document.querySelector('[data-marcador="París"]')).toHaveAttribute("aria-label", "París: ver ficha"));
     expect(screen.getByText("Mapa y datos geográficos · © OpenStreetMap contributors")).toBeInTheDocument();
     expect(botonesCiudades()).toHaveLength(4);
     expect(botonesCiudades()[0]).toHaveTextContent("01ParísFrancia");
@@ -138,7 +139,7 @@ describe("Itinerary", () => {
 
     expect(await screen.findByText("OpenRouteService · © OpenStreetMap contributors")).toBeInTheDocument();
     expect(screen.getByTestId("linea")).toHaveAttribute("data-positions", JSON.stringify([[48.85, 2.35], [48.9, 2.4]]));
-    expect(mapa.setView).toHaveBeenCalledWith([48.85, 2.35], 9);
+    await waitFor(() => expect(mapa.setView).toHaveBeenCalledWith([48.85, 2.35], 9));
     expect(mapa.fitBounds).not.toHaveBeenCalled();
   });
 
@@ -148,6 +149,7 @@ describe("Itinerary", () => {
     renderPage();
 
     expect(await screen.findByTestId("mapa")).toHaveAttribute("data-center", JSON.stringify([-34.6037, -58.3816]));
+    await flush(); // deja correr los efectos antes de comprobar que no encuadraron nada
     expect(screen.queryByTestId("linea")).not.toBeInTheDocument();
     expect(mapa.fitBounds).not.toHaveBeenCalled();
     expect(mapa.setView).not.toHaveBeenCalled();
