@@ -33,7 +33,7 @@ function Login() {
         submittedEmail,
         submittedPassword
       );
-      navigate("/my-trips");
+      void navigate("/my-trips");
     } catch (loginError) {
       setError(
         loginError instanceof Error

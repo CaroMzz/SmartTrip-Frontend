@@ -44,7 +44,7 @@ function Registration() {
     setIsSubmitting(true);
     try {
       const resultado = await registrar({ nombre, email, contraseña });
-      navigate("/email-verification", {
+      void navigate("/email-verification", {
         state: { email, correoEnviado: resultado.correoEnviado },
       });
     } catch (registrationError) {
