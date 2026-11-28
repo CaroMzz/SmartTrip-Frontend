@@ -275,12 +275,12 @@ function Faq() {
       {/* Barra de navegación pública superior */}
       <header className="faq-navbar">
         <div className="faq-navbar-inner">
-          <div className="faq-brand" onClick={() => navigate("/")}>
+          <button type="button" className="faq-brand" aria-label="SmartTrip, inicio" onClick={() => navigate("/")}>
             <span className="faq-brand-icon">✦</span>
             <span className="faq-brand-name">SmartTrip</span>
             <span className="faq-brand-divider">/</span>
             <span className="faq-brand-badge">Centro de Ayuda</span>
-          </div>
+          </button>
 
           <nav className="faq-nav-actions">
             <button
