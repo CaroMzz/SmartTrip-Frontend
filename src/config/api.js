@@ -1,4 +1,12 @@
-const API_URL = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "");
+// Quita las barras finales sin regex: /\/+$/ tarda de forma cuadrática con muchas barras (Sonar S8786).
+function sinBarrasFinales(url) {
+  let fin = url.length;
+  while (url[fin - 1] === "/") fin -= 1;
+  return url.slice(0, fin);
+}
+
+const valor = import.meta.env.VITE_API_URL?.trim();
+const API_URL = valor && sinBarrasFinales(valor);
 
 export function getApiUrl() {
   if (!API_URL) {

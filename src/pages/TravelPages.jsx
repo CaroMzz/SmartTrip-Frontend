@@ -98,9 +98,9 @@ export function MyTrips() {
       return;
     }
     setCurrentTripId(String(id));
-    if (trip.estado === "itinerario_seleccionado") navigate("/itinerary");
-    else if (trip.estado === "alternativas_generadas") navigate("/compare-itineraries");
-    else navigate("/edit-trip");
+    if (trip.estado === "itinerario_seleccionado") void navigate("/itinerary");
+    else if (trip.estado === "alternativas_generadas") void navigate("/compare-itineraries");
+    else void navigate("/edit-trip");
   };
 
   const deleteTrip = async (trip) => {
@@ -159,7 +159,7 @@ export function MyTrips() {
               </button>
               <div className="trip-card-actions">
                 <button type="button" onClick={() => openTrip(trip)}>Abrir viaje</button>
-                <button type="button" onClick={() => { setCurrentTripId(String(tripId(trip))); navigate("/edit-trip"); }}>Editar</button>
+                <button type="button" onClick={() => { setCurrentTripId(String(tripId(trip))); void navigate("/edit-trip"); }}>Editar</button>
                 <button type="button" className="danger-link" onClick={() => deleteTrip(trip)}>Eliminar</button>
               </div>
             </article>
@@ -194,7 +194,7 @@ function TripDetailsForm({ initialTrip, onSubmit, submitLabel }) {
     const missing = countries.filter((country) => !country.codigo);
     if (codesLookedUp.current || !missing.length) return;
     codesLookedUp.current = true;
-    Promise.all(missing.map((country) => buscarPaises(country.nombre)
+    void Promise.all(missing.map((country) => buscarPaises(country.nombre)
       .then((response) => (response.resultados || []).find((option) => option.nombre.toLowerCase() === country.nombre.toLowerCase()))
       .catch(() => null)))
       .then((found) => {
@@ -425,7 +425,7 @@ export function NewTrip() {
     const id = tripId(response.viaje);
     if (!id) throw new Error("El servidor creó el viaje sin devolver su identificador.");
     setCurrentTripId(String(id));
-    navigate("/budget-preferences");
+    void navigate("/budget-preferences");
   };
 
   return (
@@ -610,7 +610,7 @@ export function BudgetPreferences() {
         transportePreferido: transport,
         prioridades: priorities,
       });
-      navigate("/compare-itineraries");
+      void navigate("/compare-itineraries");
     } catch (saveError) {
       setError(saveError.message);
       setFieldErrors(saveError.errors || {});
@@ -720,7 +720,7 @@ export function CompareItineraries() {
         if (active) setLoading(false);
       }
     };
-    load();
+    void load();
     return () => { active = false; };
   }, [id]);
 
@@ -734,7 +734,7 @@ export function CompareItineraries() {
     setError("");
     try {
       await seleccionarItinerario(id, optionId);
-      navigate("/itinerary");
+      void navigate("/itinerary");
     } catch (requestError) {
       setError(requestError.message);
       setSelecting("");

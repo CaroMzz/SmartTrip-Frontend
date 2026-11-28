@@ -34,7 +34,7 @@ function WorkspaceLayout({ title, description, children }) {
       message = error instanceof Error ? error.message : "No se pudo cerrar la sesión en el servidor.";
     } finally {
       clearSession();
-      navigate("/", {
+      void navigate("/", {
         replace: true,
         state: message ? { notice: `La sesión local se cerró. ${message}` } : undefined,
       });

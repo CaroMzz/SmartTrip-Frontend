@@ -97,4 +97,13 @@ describe("Faq Component (Centro de Ayuda - ISO/IEC/IEEE 26514)", () => {
       screen.queryByText(/¿Qué requisitos de sistema o navegador necesito/i)
     ).not.toBeInTheDocument();
   });
+
+  it("la marca del encabezado es un botón que vuelve al inicio", () => {
+    window.history.pushState({}, "", "/faq");
+    renderWithRouter(<Faq />);
+
+    fireEvent.click(screen.getByRole("button", { name: "SmartTrip, inicio" }));
+
+    expect(window.location.pathname).toBe("/");
+  });
 });
