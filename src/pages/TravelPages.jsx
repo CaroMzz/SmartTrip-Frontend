@@ -484,9 +484,8 @@ export function EditTrip() {
   if (error) return <WorkspaceLayout title="Editar viaje"><Notice>{error}</Notice></WorkspaceLayout>;
 
   return (
-    <WorkspaceLayout title="Editar viaje" description="Actualizá los datos de tu viaje. Al guardar podés volver a generar las alternativas.">
+    <WorkspaceLayout title="Editar viaje" description="Actualiza los datos de tu viaje">
       <section className="trip-panel">
-        <Notice type="info">Guardar cambios reinicia el estado del viaje y elimina las alternativas anteriores.</Notice>
         <TripDetailsForm key={id} initialTrip={trip} onSubmit={saveChanges} submitLabel="Guardar cambios" />
         {saved && (
           <div className="trip-success-actions">
