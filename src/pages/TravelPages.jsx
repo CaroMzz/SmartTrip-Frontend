@@ -90,7 +90,7 @@ export function MyTrips() {
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, []);
-
+ 
   const openTrip = (trip) => {
     const id = tripId(trip);
     if (!id) {
